@@ -5,17 +5,35 @@
         <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
         <title>Brooklyn Amazon FBA Prep Center</title>
         <style>
-            .logo{
-                width: 200px;
-                height: auto:
-            }
-            @media (max-width: 768px){
-                .logo{
-                    width:80vw;
-                    max-width: 360px;
-                }
-            }
-        </style>
+  /* Desktop (по умолчанию) */
+  .logo{
+    width: 200px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
+
+  /* Tablet */
+  @media (max-width: 1024px){
+    .logo{
+      width: 260px;
+    }
+  }
+
+  /* Mobile */
+  @media (max-width: 768px){
+    .logo{
+      width: min(88vw, 380px); /* 88% экрана, но не больше 380px */
+    }
+  }
+
+  /* Small mobile */
+  @media (max-width: 420px){
+    .logo{
+      width: min(92vw, 340px);
+    }
+  }
+</style>
     </head>
     <body>
         <img class="logo" src="logo.png">
