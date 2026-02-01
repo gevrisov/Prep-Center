@@ -11,14 +11,20 @@
 :root{
   --ticker-h:34px;
   --header-h:64px;
+
+  --bg-black:#000;
+  --glass: rgba(10,10,10,0.58);      /* тот самый красивый полупрозрачный */
+  --glass-border: rgba(255,255,255,0.06);
+  --text:#fff;
 }
 
 /* ================= BODY ================= */
 body{
   font-family:Arial, sans-serif;
-  background:#000;
-  color:#fff;
+  background:var(--bg-black);
+  color:var(--text);
   padding-top:calc(var(--ticker-h) + var(--header-h));
+  min-height:100vh;
 }
 
 /* ================= BACKGROUND BOXES ================= */
@@ -35,6 +41,7 @@ body{
   border-radius:0;
   border:1px solid rgba(0,0,0,.28);
   background-image:
+    /* tape (wide) */
     linear-gradient(to bottom,
       transparent 0%,
       transparent 44%,
@@ -43,17 +50,22 @@ body{
       transparent 58%,
       transparent 100%
     ),
+    /* tape seam (center line) */
     linear-gradient(to bottom,
+      transparent 0%,
       transparent 50.7%,
       rgba(0,0,0,.28) 50.7%,
       rgba(0,0,0,.28) 52%,
-      transparent 52%
+      transparent 52%,
+      transparent 100%
     ),
+    /* very soft fibers */
     repeating-linear-gradient(
       45deg,
       rgba(255,255,255,.01) 0px,
       rgba(0,0,0,.01) 6px
     ),
+    /* cardboard base */
     linear-gradient(135deg,#b98956 0%,#9a7646 38%,#87643a 100%);
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.08),
@@ -63,7 +75,6 @@ body{
   will-change:transform;
 }
 
-/* cube shading */
 .box::before{
   content:"";
   position:absolute;
@@ -76,7 +87,6 @@ body{
     linear-gradient(to top,rgba(0,0,0,.16),transparent 28%);
 }
 
-/* icon only */
 .box::after{
   content:"";
   position:absolute;
@@ -91,10 +101,25 @@ body{
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cg fill='none' stroke='%2323180F' stroke-opacity='0.7' stroke-width='4'%3E%3Cpath d='M20 40V18M20 18l-6 6M20 18l6 6M44 40V18M44 18l-6 6M44 18l6 6'/%3E%3C/g%3E%3Crect x='10' y='10' width='44' height='44' fill='none' stroke='%2323180F' stroke-opacity='0.35' stroke-width='3'/%3E%3C/svg%3E");
 }
 
-/* animations */
 @keyframes drop{
   from{transform:translate3d(var(--x0),-140px,0) rotate(var(--r0))}
   to{transform:translate3d(var(--x1),calc(100vh + 180px),0) rotate(var(--r1))}
+}
+
+/* ================= PAGE GLASS (THE EFFECT YOU LIKED) ================= */
+/* Этот слой покрывает всю страницу, и коробки "проходят" под ним */
+.page-glass{
+  position:fixed;
+  inset:0;
+  z-index:4;                 /* above boxes, below content/header/menu */
+  pointer-events:none;
+
+  background: var(--glass);
+  border-top: 1px solid rgba(255,255,255,0.02);
+
+  /* лёгкий blur, но не сильный */
+  backdrop-filter: blur(2.5px);
+  -webkit-backdrop-filter: blur(2.5px);
 }
 
 /* ================= TICKER ================= */
@@ -116,7 +141,6 @@ body{
   padding-left:100%;
   animation:ticker 18s linear infinite;
 }
-
 @keyframes ticker{
   from{transform:translateX(0)}
   to{transform:translateX(-100%)}
@@ -141,48 +165,35 @@ header{
   border-bottom:1px solid rgba(255,255,255,.25);
 }
 
-.logo{width:180px}
+.logo{width:180px;height:auto;display:block}
 
-/* ================= BURGER ================= */
+/* ================= BURGER (WHITE) ================= */
 .burger{
-  width:28px;
-  height:28px;
-  background:none;
-  border:none;
+  width:28px;height:28px;
+  background:none;border:none;
   cursor:pointer;
   position:relative;
   -webkit-tap-highlight-color:transparent;
 }
-
 .burger:focus-visible{outline:none}
-
 .burger span{
-  position:absolute;
-  left:0;
-  width:100%;
-  height:2px;
+  position:absolute;left:0;
+  width:100%;height:2px;
   background:#fff;
   transition:.25s;
+  border-radius:0;
 }
-
 .burger span:nth-child(1){top:7px}
 .burger span:nth-child(2){top:13px}
 .burger span:nth-child(3){top:19px}
 
-.burger.active span:nth-child(1){
-  transform:translateY(6px) rotate(45deg)
-}
-.burger.active span:nth-child(2){
-  opacity:0
-}
-.burger.active span:nth-child(3){
-  transform:translateY(-6px) rotate(-45deg)
-}
+.burger.active span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+.burger.active span:nth-child(2){opacity:0}
+.burger.active span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
 
 /* ================= MENU ================= */
 .overlay{
-  position:fixed;
-  inset:0;
+  position:fixed;inset:0;
   background:rgba(0,0,0,.45);
   opacity:0;
   pointer-events:none;
@@ -193,8 +204,7 @@ header{
 
 nav.mobile-menu{
   position:fixed;
-  right:0;
-  top:0;
+  right:0;top:0;
   height:100vh;
   width:min(82vw,360px);
   background:#fff;
@@ -202,6 +212,7 @@ nav.mobile-menu{
   transition:.25s;
   z-index:1050;
   padding:calc(var(--ticker-h) + var(--header-h) + 24px) 20px;
+  box-shadow:-8px 0 24px rgba(0,0,0,.12);
 }
 nav.mobile-menu.active{transform:translateX(0)}
 nav.mobile-menu a{
@@ -217,18 +228,15 @@ body.menu-open{overflow:hidden}
 /* ================= CONTENT ================= */
 main{
   position:relative;
-  z-index:5;
+  z-index:5;       /* above page-glass */
   padding:24px;
   max-width:1200px;
   margin:auto;
+  min-height:120vh; /* чтобы было куда скроллить */
 }
 
-.section{
-  background:rgba(10,10,10,.55);
-  border:1px solid rgba(255,255,255,.06);
-  padding:22px;
-  margin-bottom:18px;
-}
+/* убрать демо-блок вообще — оставим пусто, как ты просил */
+.hidden-demo{display:none}
 
 /* desktop */
 @media(min-width:769px){
@@ -240,6 +248,7 @@ main{
 <body>
 
 <div class="boxes-bg" id="boxesBg"></div>
+<div class="page-glass" aria-hidden="true"></div>
 
 <div class="ticker">
   <div class="ticker__content">
@@ -249,7 +258,7 @@ main{
 
 <header>
   <img src="logo.png" class="logo" alt="PrepNest NY">
-  <button class="burger">
+  <button class="burger" aria-label="Menu" aria-expanded="false">
     <span></span><span></span><span></span>
   </button>
 </header>
@@ -257,45 +266,79 @@ main{
 <div class="overlay" id="overlay"></div>
 
 <nav class="mobile-menu" id="menu">
-  <a href="#">Home</a>
-  <a href="#">Services</a>
-  <a href="#">Pricing</a>
-  <a href="#">Contact</a>
+  <a href="#home">Home</a>
+  <a href="#services">Services</a>
+  <a href="#pricing">Pricing</a>
+  <a href="#contact">Contact</a>
 </nav>
 
-<main>
-  <div class="section"><h1>PrepNest NY</h1></div>
+<main id="home">
+  <!-- можешь потом добавлять секции сюда -->
+  <div style="height: 120vh;"></div>
 </main>
 
 <script>
-const burger=document.querySelector('.burger')
-const menu=document.getElementById('menu')
-const overlay=document.getElementById('overlay')
+const burger=document.querySelector('.burger');
+const menu=document.getElementById('menu');
+const overlay=document.getElementById('overlay');
 
-burger.onclick=()=>{
-  burger.classList.toggle('active')
-  menu.classList.toggle('active')
-  overlay.classList.toggle('active')
-  document.body.classList.toggle('menu-open')
+function toggleMenu(){
+  const open = burger.classList.toggle('active');
+  menu.classList.toggle('active', open);
+  overlay.classList.toggle('active', open);
+  document.body.classList.toggle('menu-open', open);
+  burger.setAttribute('aria-expanded', open ? 'true' : 'false');
 }
 
-overlay.onclick=()=>burger.onclick()
+burger.addEventListener('click', toggleMenu);
+overlay.addEventListener('click', () => {
+  if (burger.classList.contains('active')) toggleMenu();
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && burger.classList.contains('active')) toggleMenu();
+});
 
 /* boxes */
-const bg=document.getElementById('boxesBg')
-for(let i=0;i<18;i++){
-  const b=document.createElement('div')
-  b.className='box'
-  const s=60+Math.random()*100
-  b.style.width=b.style.height=s+'px'
-  const x=Math.random()*window.innerWidth
-  b.style.setProperty('--x0',x+'px')
-  b.style.setProperty('--x1',(x+(Math.random()*200-100))+'px')
-  b.style.setProperty('--r0',(Math.random()*20-10)+'deg')
-  b.style.setProperty('--r1',(Math.random()*720)+'deg')
-  b.style.animation=`drop ${10+Math.random()*8}s linear ${Math.random()*5}s infinite`
-  bg.appendChild(b)
-}
+(function(){
+  const bg=document.getElementById('boxesBg');
+  const count = window.matchMedia('(max-width: 768px)').matches ? 14 : 20;
+
+  function rand(min,max){ return Math.random()*(max-min)+min; }
+
+  function spawn(){
+    const b=document.createElement('div');
+    b.className='box';
+
+    const size = rand(60, 160);
+    b.style.width = size + 'px';
+    b.style.height = size + 'px';
+
+    const x0 = rand(-60, window.innerWidth + 60);
+    const x1 = x0 + rand(-160, 160);
+
+    b.style.setProperty('--x0', x0 + 'px');
+    b.style.setProperty('--x1', x1 + 'px');
+    b.style.setProperty('--r0', rand(-14, 14) + 'deg');
+    b.style.setProperty('--r1', rand(360, 900) + 'deg');
+
+    b.style.animation = `drop ${rand(10,18)}s linear ${rand(0,6)}s infinite`;
+
+    bg.appendChild(b);
+  }
+
+  bg.innerHTML='';
+  for(let i=0;i<count;i++) spawn();
+
+  let t;
+  window.addEventListener('resize', () => {
+    clearTimeout(t);
+    t=setTimeout(() => {
+      bg.innerHTML='';
+      for(let i=0;i<count;i++) spawn();
+    }, 250);
+  });
+})();
 </script>
 
 </body>
