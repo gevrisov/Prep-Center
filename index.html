@@ -13,7 +13,7 @@
   --header-h:64px;
   --bg-black:#000;
 
-  /* conveyor speed */
+  /* ONE source of truth */
   --belt-speed: 8.5s;
 
   /* cardboard */
@@ -38,7 +38,7 @@ body{
   min-height: 100vh;
 }
 
-/* ================= CONVEYOR BACKGROUND ================= */
+/* ================= CONVEYOR STAGE ================= */
 .conveyor-stage{
   position: fixed;
   inset: 0;
@@ -47,6 +47,7 @@ body{
   overflow: hidden;
 }
 
+/* belt area (top view) */
 .conveyor{
   position: absolute;
   top: 0;
@@ -54,6 +55,7 @@ body{
   left: 50%;
   transform: translateX(-50%);
   width: min(520px, 86vw);
+
   background:
     linear-gradient(to right,
       rgba(255,255,255,0.05) 0%,
@@ -63,14 +65,17 @@ body{
       rgba(255,255,255,0.05) 100%
     ),
     linear-gradient(#0b0b0b, #050505);
+
   box-shadow:
     inset 0 0 0 1px rgba(255,255,255,0.06),
     inset 0 40px 80px rgba(255,255,255,0.04),
     0 0 0 1px rgba(0,0,0,0.6);
+
   border-left: 1px solid rgba(255,255,255,0.08);
   border-right: 1px solid rgba(255,255,255,0.08);
 }
 
+/* rails */
 .conveyor::before,
 .conveyor::after{
   content:"";
@@ -84,25 +89,7 @@ body{
 .conveyor::before{ left: -12px; }
 .conveyor::after { right: -12px; }
 
-.belt-texture{
-  position:absolute;
-  inset:0;
-  background:
-    repeating-linear-gradient(
-      to bottom,
-      rgba(255,255,255,0.045) 0px,
-      rgba(255,255,255,0.045) 10px,
-      rgba(0,0,0,0.00) 10px,
-      rgba(0,0,0,0.00) 26px
-    );
-  opacity: .45;
-  animation: beltMove var(--belt-speed) linear infinite;
-}
-@keyframes beltMove{
-  from{ transform: translateY(0); }
-  to{ transform: translateY(26px); }
-}
-
+/* lane guides */
 .lane-guides{
   position:absolute;
   inset:0;
@@ -120,13 +107,54 @@ body{
   opacity:.6;
 }
 
-.boxes-track{
+/* CLIP area */
+.track{
   position:absolute;
-  top:0; bottom:0;
-  left:0; right:0;
+  inset:0;
   overflow:hidden;
 }
 
+/* ================= STRICT SYNC: BELT + BOXES use SAME animation ================= */
+/* one common flow animation with SAME distance & duration */
+@keyframes flowDown{
+  from{ transform: translateY(-200px); }
+  to  { transform: translateY(calc(100vh + 200px)); }
+}
+
+/* belt texture layer (moves down exactly like boxes) */
+.belt-surface{
+  position:absolute;
+  left:0; right:0;
+  top:-200px;
+  height: calc(100% + 400px);
+
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,0.045) 0px,
+      rgba(255,255,255,0.045) 10px,
+      rgba(0,0,0,0.00) 10px,
+      rgba(0,0,0,0.00) 26px
+    );
+
+  opacity: .45;
+
+  /* STRICTLY same motion as boxes */
+  animation: flowDown var(--belt-speed) linear infinite;
+}
+
+/* boxes layer container (also moves down exactly like belt) */
+.boxes-flow{
+  position:absolute;
+  left:0; right:0;
+  top:-200px;
+  height: calc(100% + 400px);
+
+  /* STRICTLY same motion as belt */
+  animation: flowDown var(--belt-speed) linear infinite;
+}
+
+/* ================= BOXES (top-view) ================= */
 .box{
   position:absolute;
   left: 50%;
@@ -136,6 +164,7 @@ body{
   border: 1px solid rgba(0,0,0,0.35);
 
   background-image:
+    /* tape */
     linear-gradient(to bottom,
       transparent 0%,
       transparent 44%,
@@ -144,6 +173,7 @@ body{
       transparent 58%,
       transparent 100%
     ),
+    /* seam line */
     linear-gradient(to bottom,
       transparent 0%,
       transparent 50.8%,
@@ -152,10 +182,12 @@ body{
       transparent 52.0%,
       transparent 100%
     ),
+    /* weak fibers */
     repeating-linear-gradient(45deg,
       rgba(255,255,255,.010) 0px,
       rgba(0,0,0,.010) 7px
     ),
+    /* base */
     linear-gradient(135deg,
       var(--cardboard-3) 0%,
       var(--cardboard-1) 38%,
@@ -166,9 +198,8 @@ body{
     inset 0 1px 0 rgba(255,255,255,.08),
     inset 0 -2px 0 rgba(0,0,0,.18),
     0 14px 26px rgba(0,0,0,0.55);
-
-  will-change: transform;
 }
+
 .box::before{
   content:"";
   position:absolute;
@@ -180,6 +211,7 @@ body{
     linear-gradient(to left,rgba(0,0,0,.14),transparent 26%),
     linear-gradient(to top,rgba(0,0,0,.16),transparent 28%);
 }
+
 .box::after{
   content:"";
   position:absolute;
@@ -194,9 +226,56 @@ body{
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cg fill='none' stroke='%2323180F' stroke-opacity='0.7' stroke-width='4'%3E%3Cpath d='M20 40V18M20 18l-6 6M20 18l6 6M44 40V18M44 18l-6 6M44 18l6 6'/%3E%3C/g%3E%3Crect x='10' y='10' width='44' height='44' fill='none' stroke='%2323180F' stroke-opacity='0.35' stroke-width='3'/%3E%3C/svg%3E");
 }
 
-@keyframes boxMove{
-  from { transform: translateX(-50%) translateY(-160px) rotate(var(--rot)) translateX(var(--side)); }
-  to   { transform: translateX(-50%) translateY(calc(100vh + 200px)) rotate(var(--rot)) translateX(var(--side)); }
+/* ================= ROBOT ARM (Jarvis-style) ================= */
+.robot-arm{
+  position:absolute;
+  /* attach to right side of conveyor */
+  left: calc(50% + min(520px, 86vw)/2 + 18px);
+  top: 22%;
+  width: 180px;
+  height: 220px;
+  z-index: 2;
+  opacity: .95;
+  filter: drop-shadow(0 18px 30px rgba(0,0,0,.55));
+}
+
+/* base plate */
+.robot-base{
+  position:absolute;
+  left: 12px;
+  top: 160px;
+  width: 86px;
+  height: 22px;
+  border-radius: 10px;
+  background: linear-gradient(#2a2a2a, #121212);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.08);
+  opacity:.85;
+}
+
+/* arm animation: whole assembly */
+@keyframes armWork{
+  0%   { transform: translateY(0) rotate(-2deg); }
+  30%  { transform: translateY(2px) rotate(3deg); }
+  55%  { transform: translateY(0) rotate(-1deg); }
+  80%  { transform: translateY(3px) rotate(4deg); }
+  100% { transform: translateY(0) rotate(-2deg); }
+}
+
+.robot-svg{
+  position:absolute;
+  inset:0;
+  transform-origin: 40px 170px; /* near base */
+  animation: armWork 2.2s ease-in-out infinite;
+}
+
+/* gripper pulse */
+@keyframes grip{
+  0%,100%{ transform: scale(1); opacity:.92; }
+  50%{ transform: scale(0.95); opacity:1; }
+}
+.grip{
+  transform-origin: 130px 58px;
+  animation: grip 1.1s ease-in-out infinite;
 }
 
 /* ================= PAGE GLASS (DO NOT TOUCH) ================= */
@@ -245,44 +324,24 @@ header{
   width: 100%;
   height: var(--header-h);
   z-index: 1100;
-
   background: var(--glass-white);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--glass-border);
-
   overflow:hidden;
 }
 
-/* 3 columns. Center is centered BETWEEN left & right because:
-   - left and right are equal-width columns
-   - center uses 1fr and text-align:center
-*/
 .header-inner{
   height: 100%;
   display:grid;
-  grid-template-columns: 56px 1fr 56px; /* equal sides */
+  grid-template-columns: 56px 1fr 56px; /* equal sides -> center is between buttons */
   align-items:center;
   padding: 0 12px;
 }
 
-.header-left{
-  display:flex;
-  align-items:center;
-  justify-content:flex-start;
-}
-
-.header-center{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
-.header-right{
-  display:flex;
-  align-items:center;
-  justify-content:flex-end;
-}
+.header-left{display:flex;align-items:center;justify-content:flex-start}
+.header-center{display:flex;align-items:center;justify-content:center}
+.header-right{display:flex;align-items:center;justify-content:flex-end}
 
 /* burger (LEFT) */
 .burger{
@@ -317,22 +376,18 @@ header{
   filter: drop-shadow(0 2px 10px rgba(0,0,0,0.35));
 }
 
-/* RIGHT: icon-only (as you asked: one thing only) */
+/* RIGHT: icon-only */
 .user-btn{
   width:36px;
   height:36px;
   border-radius:999px;
-
   display:flex;
   align-items:center;
   justify-content:center;
-
   border: 1px solid rgba(255,255,255,0.18);
   background: rgba(0,0,0,0.18);
-
   cursor:pointer;
   -webkit-tap-highlight-color:transparent;
-
   transition: background .15s ease, border-color .15s ease, transform .15s ease;
 }
 .user-btn:hover{
@@ -345,7 +400,7 @@ header{
 .user-ico{ width:18px; height:18px; opacity:.95; }
 .user-ico path{ stroke:#fff; }
 
-/* ================= OVERLAY ================= */
+/* overlay */
 .overlay{
   position:fixed; inset:0;
   background:rgba(0,0,0,.45);
@@ -356,7 +411,7 @@ header{
 }
 .overlay.active{opacity:1;pointer-events:auto}
 
-/* ================= MOBILE MENU (GLASS) ================= */
+/* mobile menu glass */
 nav.mobile-menu{
   position:fixed;
   right:0; top:0;
@@ -422,9 +477,10 @@ main{
   .burger,.overlay,nav.mobile-menu{display:none}
 }
 
-/* tighter on tiny screens */
+/* tiny screens */
 @media(max-width:420px){
   .conveyor{ width: 92vw; }
+  .robot-arm{ display:none; } /* hide arm on very small screens to avoid clutter */
 }
 </style>
 </head>
@@ -433,11 +489,51 @@ main{
 
 <!-- Conveyor stage -->
 <div class="conveyor-stage" aria-hidden="true">
+
   <div class="conveyor">
-    <div class="belt-texture"></div>
     <div class="lane-guides"></div>
-    <div class="boxes-track" id="boxesTrack"></div>
+
+    <div class="track">
+      <!-- belt surface (STRICT SYNC with boxes) -->
+      <div class="belt-surface"></div>
+
+      <!-- boxes surface (STRICT SYNC with belt) -->
+      <div class="boxes-flow" id="boxesFlow"></div>
+    </div>
   </div>
+
+  <!-- Robot arm attached to conveyor -->
+  <div class="robot-arm" aria-hidden="true">
+    <div class="robot-base"></div>
+
+    <svg class="robot-svg" viewBox="0 0 180 220" fill="none">
+      <!-- support column -->
+      <path d="M48 175 L48 105" stroke="rgba(255,255,255,0.35)" stroke-width="10" stroke-linecap="round"/>
+      <path d="M48 175 L48 105" stroke="rgba(0,0,0,0.35)" stroke-width="12" stroke-linecap="round" opacity=".6"/>
+
+      <!-- shoulder joint -->
+      <circle cx="48" cy="105" r="16" fill="rgba(255,255,255,0.10)" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>
+
+      <!-- upper arm -->
+      <path d="M52 106 C84 92, 92 78, 108 64" stroke="rgba(255,255,255,0.35)" stroke-width="12" stroke-linecap="round"/>
+      <path d="M52 106 C84 92, 92 78, 108 64" stroke="rgba(0,0,0,0.35)" stroke-width="14" stroke-linecap="round" opacity=".55"/>
+
+      <!-- elbow joint -->
+      <circle cx="108" cy="64" r="14" fill="rgba(255,255,255,0.10)" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>
+
+      <!-- forearm -->
+      <path d="M112 66 C128 56, 142 54, 156 58" stroke="rgba(255,255,255,0.35)" stroke-width="10" stroke-linecap="round"/>
+      <path d="M112 66 C128 56, 142 54, 156 58" stroke="rgba(0,0,0,0.35)" stroke-width="12" stroke-linecap="round" opacity=".55"/>
+
+      <!-- gripper -->
+      <g class="grip">
+        <circle cx="156" cy="58" r="10" fill="rgba(255,255,255,0.10)" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>
+        <path d="M162 60 L174 68" stroke="rgba(255,255,255,0.32)" stroke-width="6" stroke-linecap="round"/>
+        <path d="M162 56 L174 48" stroke="rgba(255,255,255,0.32)" stroke-width="6" stroke-linecap="round"/>
+      </g>
+    </svg>
+  </div>
+
 </div>
 
 <!-- Page glass (DO NOT TOUCH) -->
@@ -464,7 +560,6 @@ main{
     </div>
 
     <div class="header-right">
-      <!-- icon only -->
       <button class="user-btn" aria-label="Log in" type="button">
         <svg class="user-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path d="M20 21a8 8 0 0 0-16 0" stroke-width="2" stroke-linecap="round"/>
@@ -509,24 +604,26 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape' && burger.classList.contains('active')) toggleMenu();
 });
 
-/* conveyor boxes (top view moving down) */
+/* boxes: place them along the belt inside the moving container.
+   Because the CONTAINER moves with the belt, they are STRICTLY synced. */
 (function(){
-  const track = document.getElementById('boxesTrack');
+  const flow = document.getElementById('boxesFlow');
+
   function rand(min,max){ return Math.random()*(max-min)+min; }
-  function getBeltSpeed(){
-    return getComputedStyle(document.documentElement)
-      .getPropertyValue('--belt-speed')
-      .trim() || '8.5s';
-  }
 
   function build(){
+    flow.innerHTML = '';
+
     const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    const BOX_COUNT = isMobile ? 8 : 10;
-    const BELT_SPEED = getBeltSpeed();
+    const count = isMobile ? 7 : 9;
 
-    track.innerHTML = '';
+    // We place boxes in the extended area (-200px .. height+200px)
+    // so when container loops, there are always boxes on the belt.
+    const totalH = window.innerHeight + 400; // same as boxes-flow height extension
+    const startY = 40;                        // padding inside container
+    const endY   = totalH - 240;
 
-    for(let i=0;i<BOX_COUNT;i++){
+    for(let i=0;i<count;i++){
       const b = document.createElement('div');
       b.className = 'box';
 
@@ -535,21 +632,19 @@ document.addEventListener('keydown', (e) => {
       b.style.width = w + 'px';
       b.style.height = h + 'px';
 
-      const rot = rand(-2.4, 2.4);
+      // positions (top-view realism)
+      const y = startY + (i*(endY-startY)/(count-1)) + rand(-22, 22);
       const side = rand(-22, 22);
+      const rot = rand(-2.4, 2.4);
 
-      const delaySec = -(parseFloat(BELT_SPEED) / BOX_COUNT) * i;
+      b.style.top = y + 'px';
+      b.style.transform = `translateX(-50%) rotate(${rot}deg) translateX(${side}px)`;
 
-      b.style.setProperty('--rot', rot + 'deg');
-      b.style.setProperty('--side', side + 'px');
-      b.style.animation = `boxMove ${BELT_SPEED} linear ${delaySec}s infinite`;
-
-      track.appendChild(b);
+      flow.appendChild(b);
     }
   }
 
   build();
-
   let t;
   window.addEventListener('resize', () => {
     clearTimeout(t);
