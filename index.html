@@ -16,6 +16,15 @@
       --bg-black: #000000;
       --text-main: #ffffff;
       --text-muted: #b5b5b5;
+
+      /* Cardboard palette */
+      --cardboard-1: #9a7646;   /* base */
+      --cardboard-2: #8a673c;   /* shade */
+      --cardboard-3: #b68957;   /* highlight */
+      --ink: rgba(35, 25, 15, 0.55);
+      --ink-strong: rgba(35, 25, 15, 0.75);
+      --tape: rgba(255, 255, 255, 0.08);
+      --tape-edge: rgba(0, 0, 0, 0.18);
     }
 
     body{
@@ -26,7 +35,7 @@
     }
 
     /* =====================
-       RANDOM BOXES BACKGROUND (BOX-LIKE)
+       RANDOM BOXES BACKGROUND (CARDBOARD BOXES)
        ===================== */
     .boxes-bg{
       position: fixed;
@@ -38,61 +47,115 @@
 
     .box{
       position: absolute;
+      border-radius: 0; /* NO rounded corners */
 
-      /* matte box material */
-      background: linear-gradient(135deg, #202020 0%, #141414 100%);
-      border: 1px solid rgba(255,255,255,0.06);
+      /* CARD BOARD look:
+         - base gradient
+         - subtle fiber/noise stripes
+         - straight tape stripe (center)
+         - barcode block (bottom-right)
+      */
+      background-image:
+        /* tape stripe (straight & ровная) */
+        linear-gradient(
+          to bottom,
+          transparent 0%,
+          transparent 44%,
+          var(--tape) 44%,
+          var(--tape) 58%,
+          transparent 58%,
+          transparent 100%
+        ),
 
-      /* not too round */
-      border-radius: 8px;
+        /* tape edges */
+        linear-gradient(
+          to bottom,
+          transparent 0%,
+          transparent 43.5%,
+          var(--tape-edge) 43.5%,
+          transparent 45%,
+          transparent 57%,
+          var(--tape-edge) 57%,
+          transparent 58.5%,
+          transparent 100%
+        ),
 
-      /* slight chamfered corners -> more “box/cube” feeling */
-      clip-path: polygon(
-        0 6px, 6px 0,
-        calc(100% - 6px) 0, 100% 6px,
-        100% calc(100% - 6px), calc(100% - 6px) 100%,
-        6px 100%, 0 calc(100% - 6px)
-      );
+        /* barcode block (bottom-right) */
+        linear-gradient(to right,
+          transparent 0%,
+          transparent 65%,
+          rgba(255,255,255,0.02) 65%,
+          rgba(255,255,255,0.02) 100%
+        ),
+        repeating-linear-gradient(
+          to right,
+          transparent 0px,
+          transparent 78%,
+          rgba(20, 14, 8, 0.38) 78%,
+          rgba(20, 14, 8, 0.38) 79.5%,
+          transparent 79.5%,
+          transparent 81%
+        ),
 
-      /* volume */
+        /* fiber/noise (subtle) */
+        repeating-linear-gradient(
+          45deg,
+          rgba(255,255,255,0.03) 0px,
+          rgba(255,255,255,0.03) 2px,
+          rgba(0,0,0,0.02) 2px,
+          rgba(0,0,0,0.02) 5px
+        ),
+
+        /* base cardboard gradient */
+        linear-gradient(135deg, var(--cardboard-3) 0%, var(--cardboard-1) 35%, var(--cardboard-2) 100%);
+
+      /* outline + depth */
+      border: 1px solid rgba(0,0,0,0.28);
       box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.05),
-        inset 0 -1px 0 rgba(0,0,0,0.45),
-        0 18px 55px rgba(0,0,0,0.75);
+        inset 0 1px 0 rgba(255,255,255,0.10),
+        inset 0 -2px 0 rgba(0,0,0,0.20),
+        0 20px 60px rgba(0,0,0,0.75);
 
       opacity: 0.92;
       will-change: transform;
     }
 
-    /* top-left “face” highlight */
+    /* Extra “cube form” illusion: top/left face highlight + right/bottom shade */
     .box::before{
       content:"";
       position:absolute;
       inset:0;
-      background: linear-gradient(
-        135deg,
-        rgba(255,255,255,0.10) 0%,
-        rgba(255,255,255,0.03) 35%,
-        rgba(0,0,0,0.00) 70%
-      );
       pointer-events:none;
+
+      background:
+        /* top highlight edge */
+        linear-gradient(to bottom, rgba(255,255,255,0.12), transparent 28%),
+        /* left highlight edge */
+        linear-gradient(to right, rgba(255,255,255,0.10), transparent 24%),
+        /* right shade edge */
+        linear-gradient(to left, rgba(0,0,0,0.18), transparent 28%),
+        /* bottom shade edge */
+        linear-gradient(to top, rgba(0,0,0,0.20), transparent 30%);
+      mix-blend-mode: multiply;
+      opacity: 0.9;
     }
 
-    /* diagonal “tape” stripe */
+    /* Markings / stamps */
     .box::after{
-      content:"";
+      content:"↑ THIS SIDE UP  •  FRAGILE";
       position:absolute;
-      left:-30%;
-      top:38%;
-      width:160%;
-      height:18%;
-      transform: rotate(-18deg);
-      background: rgba(255,255,255,0.06);
-      border-top: 1px solid rgba(255,255,255,0.08);
-      border-bottom: 1px solid rgba(0,0,0,0.35);
-      pointer-events:none;
+      left: 10px;
+      bottom: 10px;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      color: var(--ink);
+      text-transform: uppercase;
+      text-shadow: 0 1px 0 rgba(255,255,255,0.06);
+      white-space: nowrap;
+      opacity: 0.9;
     }
 
+    /* Falling motion */
     @keyframes drop {
       0%   { transform: translate3d(var(--x0), -140px, 0) rotate(var(--r0)); }
       100% { transform: translate3d(var(--x1), calc(100vh + 180px), 0) rotate(var(--r1)); }
@@ -187,7 +250,7 @@
       width: 100%;
       height: 2px;
       background: #000;
-      border-radius: 2px;
+      border-radius: 0; /* sharp ends */
       transition: transform 0.25s ease, opacity 0.2s ease;
       transform-origin: center;
     }
@@ -227,7 +290,7 @@
     }
 
     /* ==========
-       MOBILE MENU (fixed; do NOT override its position)
+       MOBILE MENU (fixed; stays right)
        ========== */
     nav.mobile-menu{
       position: fixed;
@@ -260,7 +323,7 @@
     }
 
     /* ==========
-       CONTENT (readable blocks)
+       CONTENT
        ========== */
     main{
       position: relative;
@@ -272,14 +335,15 @@
     }
 
     .section{
-      background: rgba(26,26,26,0.80);
-      border: 1px solid rgba(42,42,42,0.85);
-      border-radius: 14px;
+      background: rgba(10,10,10,0.55);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 0; /* sharp */
       padding: 22px;
       box-shadow:
         inset 0 1px 0 rgba(255,255,255,0.03),
         0 18px 50px rgba(0,0,0,0.65);
       margin-bottom: 18px;
+      backdrop-filter: blur(2px);
     }
 
     .section h1, .section h2{
@@ -324,7 +388,6 @@
   <!-- Header -->
   <header>
     <img src="logo.png" alt="PrepNest NY" class="logo" />
-
     <button class="burger" aria-label="Menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
@@ -403,7 +466,7 @@
     });
 
     /* =========================
-       Random falling/rolling boxes
+       Random falling/rolling cardboard boxes
        ========================= */
     (function(){
       const bg = document.getElementById('boxesBg');
@@ -431,13 +494,13 @@
         const xDrift = rand(-170, 170);
         const x1 = x0 + xDrift;
 
-        const r0 = rand(-35, 35) + 'deg';
-        const spins = rand(520, 1100) * (Math.random() < 0.5 ? -1 : 1);
+        const r0 = rand(-18, 18) + 'deg';
+        const spins = rand(380, 900) * (Math.random() < 0.5 ? -1 : 1);
         const r1 = `calc(${r0} + ${spins}deg)`;
 
         const duration = rand(10, 19);
         const delay = rand(0, 6);
-        const depth = rand(0.65, 1.0);
+        const depth = rand(0.70, 1.0);
 
         el.style.opacity = String(0.55 + depth * 0.45);
 
@@ -445,6 +508,11 @@
         el.style.setProperty('--x1', x1 + 'px');
         el.style.setProperty('--r0', r0);
         el.style.setProperty('--r1', r1);
+
+        /* Make tape stripe perfectly level (no rotation): randomize its position a bit but keep it straight */
+        const tapeTop = Math.floor(rand(34, 50)); // percent
+        el.style.backgroundImage = el.style.backgroundImage; // keep composed backgrounds
+        el.style.setProperty('--tapeTop', tapeTop + '%');
 
         if (!prefersReduced){
           el.style.animation =
