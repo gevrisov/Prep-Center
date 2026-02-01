@@ -7,94 +7,145 @@
 
   <style>
     /* RESET */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --ticker-h: 34px;
+      --header-h: 64px;
+    }
 
     body {
       font-family: Arial, sans-serif;
-      padding-top: 64px; /* space for fixed header */
+      padding-top: calc(var(--ticker-h) + var(--header-h));
     }
 
-    /* HEADER */
+    /* =====================
+       TICKER (RUNNING BAR)
+       ===================== */
+    .ticker {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: var(--ticker-h);
+      background: #000;
+      color: #fff;
+      z-index: 1200;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+    }
+
+    .ticker__track {
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .ticker__content {
+      display: inline-flex;
+      gap: 18px;
+      white-space: nowrap;
+      padding-left: 100%;
+      animation: ticker-move 18s linear infinite;
+    }
+
+    @keyframes ticker-move {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-100%); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ticker__content {
+        animation: none;
+        padding-left: 0;
+      }
+    }
+
+    /* ==========
+       HEADER
+       ========== */
     header {
       position: fixed;
-      top: 0; left: 0;
+      top: var(--ticker-h);
+      left: 0;
       width: 100%;
-      height: 64px;
+      height: var(--header-h);
       background: #fff;
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 0 16px;
       border-bottom: 1px solid #eaeaea;
-      z-index: 1000;
+      z-index: 1100;
     }
 
-    /* LOGO */
     .logo {
       width: 180px;
       height: auto;
       display: block;
     }
 
-   /* BURGER BUTTON */
-.burger {
-  position: relative;
-  width: 28px;
-  height: 28px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  -webkit-tap-highlight-color: transparent;
-}
+    /* ==========
+       BURGER
+       ========== */
+    .burger {
+      position: relative;
+      width: 28px;
+      height: 28px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-/* LINES */
-.burger span {
-  position: absolute;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: #000;
-  border-radius: 2px;
-  transition: transform 0.25s ease, opacity 0.2s ease;
-  transform-origin: center;
-}
+    .burger:focus-visible {
+      outline: none;
+    }
 
-/* INITIAL POSITIONS */
-.burger span:nth-child(1) {
-  top: 7px;
-}
+    .burger span {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: #000;
+      border-radius: 2px;
+      transition: transform 0.25s ease, opacity 0.2s ease;
+      transform-origin: center;
+    }
 
-.burger span:nth-child(2) {
-  top: 13px;
-}
+    .burger span:nth-child(1) { top: 7px; }
+    .burger span:nth-child(2) { top: 13px; }
+    .burger span:nth-child(3) { top: 19px; }
 
-.burger span:nth-child(3) {
-  top: 19px;
-}
+    .burger.active span:nth-child(1) {
+      transform: translateY(6px) rotate(45deg);
+    }
 
-/* ACTIVE → PERFECT X */
-.burger.active span:nth-child(1) {
-  transform: translateY(6px) rotate(45deg);
-}
+    .burger.active span:nth-child(2) {
+      opacity: 0;
+    }
 
-.burger.active span:nth-child(2) {
-  opacity: 0;
-}
+    .burger.active span:nth-child(3) {
+      transform: translateY(-6px) rotate(-45deg);
+    }
 
-.burger.active span:nth-child(3) {
-  transform: translateY(-6px) rotate(-45deg);
-}
-
-    /* OVERLAY */
+    /* ==========
+       OVERLAY
+       ========== */
     .overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.45);
+      background: rgba(0,0,0,0.45);
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.25s ease;
-      z-index: 998;
+      z-index: 1000;
     }
 
     .overlay.active {
@@ -102,7 +153,9 @@
       pointer-events: auto;
     }
 
-    /* SLIDE-IN MENU (mobile) */
+    /* ==========
+       MOBILE MENU
+       ========== */
     nav.mobile-menu {
       position: fixed;
       top: 0;
@@ -112,8 +165,8 @@
       background: #fff;
       transform: translateX(100%);
       transition: transform 0.25s ease;
-      z-index: 999;
-      padding: 88px 20px 24px; /* space for header */
+      z-index: 1050;
+      padding: calc(var(--ticker-h) + var(--header-h) + 24px) 20px 24px;
       display: flex;
       flex-direction: column;
       gap: 18px;
@@ -130,7 +183,6 @@
       font-size: 18px;
     }
 
-    /* Prevent background scroll when menu open */
     body.menu-open {
       overflow: hidden;
       touch-action: none;
@@ -138,25 +190,47 @@
 
     /* DESKTOP */
     @media (min-width: 769px) {
-      .burger { display: none; }
-      .overlay { display: none; }
-      nav.mobile-menu { display: none; }
+      .burger,
+      .overlay,
+      nav.mobile-menu {
+        display: none;
+      }
     }
 
-    /* CONTENT */
+    /* ==========
+       CONTENT
+       ========== */
     main {
       padding: 24px;
     }
 
-    h1 { margin-bottom: 10px; }
-    p { line-height: 1.5; }
+    h1 { margin-bottom: 12px; }
+    p  { line-height: 1.5; }
   </style>
 </head>
 
 <body>
 
+  <!-- TICKER -->
+  <div class="ticker">
+    <div class="ticker__track">
+      <div class="ticker__content">
+        <span>📦 Amazon Prep Center in Brooklyn •</span>
+        <span>✅ Receiving • Labeling • Bundling •</span>
+        <span>🚚 Fast turnaround •</span>
+        <span>📩 Contact us today •</span>
+
+        <span>📦 Amazon Prep Center in Brooklyn •</span>
+        <span>✅ Receiving • Labeling • Bundling •</span>
+        <span>🚚 Fast turnaround •</span>
+        <span>📩 Contact us today •</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER -->
   <header>
-    <img src="logo.png" alt="Brooklyn Prep Center" class="logo" />
+    <img src="logo.png" alt="PrepNest NY" class="logo" />
 
     <button class="burger" aria-label="Menu" aria-expanded="false">
       <span></span>
@@ -165,15 +239,37 @@
     </button>
   </header>
 
+  <!-- OVERLAY -->
   <div class="overlay" id="overlay"></div>
 
-  <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile Menu">
+  <!-- MOBILE MENU -->
+  <nav class="mobile-menu" id="mobileMenu">
     <a href="#home">Home</a>
     <a href="#services">Services</a>
     <a href="#pricing">Pricing</a>
     <a href="#contact">Contact</a>
   </nav>
 
+  <!-- CONTENT -->
+  <main>
+    <h1 id="home">Welcome to PrepNest NY</h1>
+    <p>Your Amazon Prep Center in New York.</p>
+
+    <div style="height: 1000px;"></div>
+
+    <h2 id="services">Services</h2>
+    <p>Inbound receiving, prep, labeling, and outbound shipments.</p>
+
+    <div style="height: 800px;"></div>
+
+    <h2 id="pricing">Pricing</h2>
+    <p>Simple pricing based on item count and prep requirements.</p>
+
+    <div style="height: 800px;"></div>
+
+    <h2 id="contact">Contact</h2>
+    <p>Email / phone / form — add your details here.</p>
+  </main>
 
   <script>
     const burger = document.querySelector('.burger');
@@ -196,22 +292,17 @@
       burger.setAttribute('aria-expanded', 'false');
     }
 
-    function toggleMenu() {
-      const isOpen = burger.classList.contains('active');
-      isOpen ? closeMenu() : openMenu();
-    }
-
-    burger.addEventListener('click', toggleMenu);
+    burger.addEventListener('click', () => {
+      burger.classList.contains('active') ? closeMenu() : openMenu();
+    });
 
     overlay.addEventListener('click', closeMenu);
 
-    // Close when clicking a link
-    menu.addEventListener('click', (e) => {
+    menu.addEventListener('click', e => {
       if (e.target.tagName === 'A') closeMenu();
     });
 
-    // Close on ESC
-    document.addEventListener('keydown', (e) => {
+    document.addEventListener('keydown', e => {
       if (e.key === 'Escape') closeMenu();
     });
   </script>
