@@ -3,35 +3,87 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Brooklyn Amazon FBA Prep Center</title>
+  <title>PrepNest NY</title>
 
   <style>
     /* RESET */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    :root {
+    :root{
       --ticker-h: 34px;
       --header-h: 64px;
+
+      --bg-black: #000000;
+      --cube-bg: #1a1a1a;        /* dark matte gray */
+      --cube-border: #2a2a2a;    /* subtle border */
+      --text-main: #ffffff;
+      --text-muted: #b5b5b5;
     }
 
-    body {
-  font-family: Arial, sans-serif;
-  background: #000; /* тот же цвет, что и у ticker */
-  color: #fff;      /* чтобы текст читался */
-  padding-top: calc(var(--ticker-h) + var(--header-h));
-}
+    body{
+      font-family: Arial, sans-serif;
+      background: var(--bg-black);
+      color: var(--text-main);
+      padding-top: calc(var(--ticker-h) + var(--header-h));
+    }
+
+    /* =====================
+       RANDOM BOXES BACKGROUND
+       ===================== */
+    .boxes-bg{
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .box{
+      position: absolute;
+      background: var(--cube-bg);
+      border: 1px solid var(--cube-border);
+      border-radius: 14px;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.03),
+        0 14px 40px rgba(0,0,0,0.70);
+      opacity: 0.95;
+      will-change: transform;
+    }
+
+    .box::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius: inherit;
+      background: linear-gradient(135deg,
+        rgba(255,255,255,0.06),
+        rgba(255,255,255,0.00) 45%,
+        rgba(0,0,0,0.00)
+      );
+      pointer-events:none;
+    }
+
+    @keyframes drop {
+      0%   { transform: translate3d(var(--x0), -140px, 0) rotate(var(--r0)); }
+      100% { transform: translate3d(var(--x1), calc(100vh + 180px), 0) rotate(var(--r1)); }
+    }
+
+    @keyframes wobble {
+      0%,100% { filter: none; }
+      50%     { filter: brightness(1.03); }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .box{ animation: none !important; }
+      .ticker__content{ animation: none !important; padding-left: 0 !important; }
+    }
 
     /* =====================
        TICKER (RUNNING BAR)
        ===================== */
-    .ticker {
+    .ticker{
       position: fixed;
-      top: 0;
-      left: 0;
+      top: 0; left: 0;
       width: 100%;
       height: var(--ticker-h);
       background: #000;
@@ -43,35 +95,26 @@
       font-size: 14px;
     }
 
-    .ticker__track {
-      width: 100%;
-      overflow: hidden;
-    }
+    .ticker__track{ width: 100%; overflow: hidden; }
 
-    .ticker__content {
+    .ticker__content{
       display: inline-flex;
       gap: 18px;
       white-space: nowrap;
       padding-left: 100%;
+      will-change: transform;
       animation: ticker-move 18s linear infinite;
     }
 
-    @keyframes ticker-move {
+    @keyframes ticker-move{
       from { transform: translateX(0); }
       to   { transform: translateX(-100%); }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .ticker__content {
-        animation: none;
-        padding-left: 0;
-      }
     }
 
     /* ==========
        HEADER
        ========== */
-    header {
+    header{
       position: fixed;
       top: var(--ticker-h);
       left: 0;
@@ -86,16 +129,16 @@
       z-index: 1100;
     }
 
-    .logo {
+    .logo{
       width: 180px;
       height: auto;
       display: block;
     }
 
     /* ==========
-       BURGER
+       BURGER (perfect X)
        ========== */
-    .burger {
+    .burger{
       position: relative;
       width: 28px;
       height: 28px;
@@ -106,11 +149,9 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    .burger:focus-visible {
-      outline: none;
-    }
+    .burger:focus-visible{ outline: none; }
 
-    .burger span {
+    .burger span{
       position: absolute;
       left: 0;
       width: 100%;
@@ -121,35 +162,26 @@
       transform-origin: center;
     }
 
-    .burger span:nth-child(1) { top: 7px; }
-    .burger span:nth-child(2) { top: 13px; }
-    .burger span:nth-child(3) { top: 19px; }
+    .burger span:nth-child(1){ top: 7px; }
+    .burger span:nth-child(2){ top: 13px; }
+    .burger span:nth-child(3){ top: 19px; }
 
-    .burger.active span:nth-child(1) {
+    .burger.active span:nth-child(1){
       transform: translateY(6px) rotate(45deg);
     }
 
-    .burger.active span:nth-child(2) {
+    .burger.active span:nth-child(2){
       opacity: 0;
     }
 
-    .burger.active span:nth-child(3) {
+    .burger.active span:nth-child(3){
       transform: translateY(-6px) rotate(-45deg);
     }
-
-main {
-  background: #fff;
-  color: #000;
-  padding: 24px;
-  max-width: 1200px;
-  margin: 0 auto;
-  min-height: 100vh;
-}
 
     /* ==========
        OVERLAY
        ========== */
-    .overlay {
+    .overlay{
       position: fixed;
       inset: 0;
       background: rgba(0,0,0,0.45);
@@ -159,7 +191,7 @@ main {
       z-index: 1000;
     }
 
-    .overlay.active {
+    .overlay.active{
       opacity: 1;
       pointer-events: auto;
     }
@@ -167,7 +199,7 @@ main {
     /* ==========
        MOBILE MENU
        ========== */
-    nav.mobile-menu {
+    nav.mobile-menu{
       position: fixed;
       top: 0;
       right: 0;
@@ -184,45 +216,70 @@ main {
       box-shadow: -8px 0 24px rgba(0,0,0,0.12);
     }
 
-    nav.mobile-menu.active {
-      transform: translateX(0);
-    }
+    nav.mobile-menu.active{ transform: translateX(0); }
 
-    nav.mobile-menu a {
+    nav.mobile-menu a{
       text-decoration: none;
       color: #000;
       font-size: 18px;
     }
 
-    body.menu-open {
+    body.menu-open{
       overflow: hidden;
       touch-action: none;
     }
 
-    /* DESKTOP */
-    @media (min-width: 769px) {
-      .burger,
-      .overlay,
-      nav.mobile-menu {
-        display: none;
-      }
-    }
-
     /* ==========
-       CONTENT
+       CONTENT (cards / readable)
        ========== */
-    main {
+    main{
+      position: relative;
+      z-index: 5;
       padding: 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+      min-height: 100vh;
     }
 
-    h1 { margin-bottom: 12px; }
-    p  { line-height: 1.5; }
+    .section{
+      background: rgba(26,26,26,0.80);
+      border: 1px solid rgba(42,42,42,0.85);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.03),
+        0 18px 50px rgba(0,0,0,0.65);
+      margin-bottom: 18px;
+    }
+
+    .section h1, .section h2{
+      margin-bottom: 10px;
+    }
+
+    .section p{
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    /* Put UI layers above boxes */
+    header, .ticker, nav.mobile-menu, .overlay{
+      position: relative;
+      z-index: 1100;
+    }
+
+    /* DESKTOP: hide burger/menu/overlay */
+    @media (min-width: 769px){
+      .burger, .overlay, nav.mobile-menu{ display: none; }
+    }
   </style>
 </head>
 
 <body>
 
-  <!-- TICKER -->
+  <!-- Random boxes background -->
+  <div class="boxes-bg" aria-hidden="true" id="boxesBg"></div>
+
+  <!-- Ticker -->
   <div class="ticker">
     <div class="ticker__track">
       <div class="ticker__content">
@@ -239,21 +296,19 @@ main {
     </div>
   </div>
 
-  <!-- HEADER -->
+  <!-- Header -->
   <header>
     <img src="logo.png" alt="PrepNest NY" class="logo" />
 
     <button class="burger" aria-label="Menu" aria-expanded="false">
-      <span></span>
-      <span></span>
-      <span></span>
+      <span></span><span></span><span></span>
     </button>
   </header>
 
-  <!-- OVERLAY -->
+  <!-- Overlay -->
   <div class="overlay" id="overlay"></div>
 
-  <!-- MOBILE MENU -->
+  <!-- Mobile Menu -->
   <nav class="mobile-menu" id="mobileMenu">
     <a href="#home">Home</a>
     <a href="#services">Services</a>
@@ -261,9 +316,33 @@ main {
     <a href="#contact">Contact</a>
   </nav>
 
- 
+  <!-- Content -->
+  <main>
+    <section class="section" id="home">
+      <h1>PrepNest NY</h1>
+      <p>Amazon prep services in New York — receiving, labeling, bundling, and fast turnaround.</p>
+    </section>
+
+    <section class="section" id="services">
+      <h2>Services</h2>
+      <p>Inbound receiving, inspection, labeling (FNSKU / warnings), polybagging, bundling, and outbound-ready packaging.</p>
+    </section>
+
+    <section class="section" id="pricing">
+      <h2>Pricing</h2>
+      <p>Simple pricing based on item count and prep requirements. Add your real pricing blocks later.</p>
+    </section>
+
+    <section class="section" id="contact">
+      <h2>Contact</h2>
+      <p>Add your email/phone or a contact form here.</p>
+    </section>
+  </main>
 
   <script>
+    /* =========================
+       Mobile menu open/close
+       ========================= */
     const burger = document.querySelector('.burger');
     const menu = document.getElementById('mobileMenu');
     const overlay = document.getElementById('overlay');
@@ -297,6 +376,73 @@ main {
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape') closeMenu();
     });
+
+    /* =========================
+       Random falling/rolling boxes
+       ========================= */
+    (function(){
+      const bg = document.getElementById('boxesBg');
+      if (!bg) return;
+
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const isMobile = window.matchMedia('(max-width: 768px)').matches;
+
+      const count = isMobile ? 14 : 22;
+      const minSize = isMobile ? 48 : 60;
+      const maxSize = isMobile ? 120 : 160;
+
+      function rand(min, max){ return Math.random() * (max - min) + min; }
+      function randi(min, max){ return Math.floor(rand(min, max)); }
+
+      function makeBox(){
+        const el = document.createElement('div');
+        el.className = 'box';
+
+        const size = randi(minSize, maxSize);
+        el.style.width = size + 'px';
+        el.style.height = size + 'px';
+
+        const x0 = rand(-40, window.innerWidth + 40);
+        const xDrift = rand(-140, 140);
+        const x1 = x0 + xDrift;
+
+        const r0 = rand(-35, 35) + 'deg';
+        const spins = rand(420, 980) * (Math.random() < 0.5 ? -1 : 1);
+        const r1 = `calc(${r0} + ${spins}deg)`;
+
+        const duration = rand(9, 18);
+        const delay = rand(0, 6);
+        const depth = rand(0.65, 1.0);
+
+        el.style.opacity = String(0.55 + depth * 0.45);
+        el.style.borderRadius = randi(10, 18) + 'px';
+
+        el.style.setProperty('--x0', x0 + 'px');
+        el.style.setProperty('--x1', x1 + 'px');
+        el.style.setProperty('--r0', r0);
+        el.style.setProperty('--r1', r1);
+
+        if (!prefersReduced){
+          el.style.animation =
+            `drop ${duration}s linear ${delay}s infinite, wobble ${rand(2.5,5)}s ease-in-out ${rand(0,2)}s infinite`;
+        }
+
+        bg.appendChild(el);
+      }
+
+      function rebuild(){
+        bg.innerHTML = '';
+        for (let i = 0; i < count; i++) makeBox();
+      }
+
+      rebuild();
+
+      let t;
+      window.addEventListener('resize', () => {
+        clearTimeout(t);
+        t = setTimeout(rebuild, 250);
+      });
+    })();
   </script>
 
 </body>
