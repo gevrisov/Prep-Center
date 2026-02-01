@@ -21,11 +21,22 @@
   }
 
   /* Mobile */
-  @media (max-width: 768px){
-    .logo{
-      width: min(88vw, 380px); /* 88% экрана, но не больше 380px */
-    }
+  .logo {
+  width: 200px;
+  height: auto;
+}
+
+/* Mobile: move logo to top-right and make it bigger */
+@media (max-width: 768px) {
+  .logo {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    width: 140px;   /* размер на мобилке — можешь менять */
+    height: auto;
+    z-index: 9999;
   }
+}
 
   /* Small mobile */
   @media (max-width: 420px){
