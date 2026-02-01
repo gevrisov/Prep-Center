@@ -1,541 +1,302 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PrepNest NY</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PrepNest NY</title>
 
-  <style>
-    /* RESET */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
 
-    :root{
-      --ticker-h: 34px;
-      --header-h: 64px;
+:root{
+  --ticker-h:34px;
+  --header-h:64px;
+}
 
-      --bg-black: #000000;
-      --text-main: #ffffff;
-      --text-muted: #b5b5b5;
+/* ================= BODY ================= */
+body{
+  font-family:Arial, sans-serif;
+  background:#000;
+  color:#fff;
+  padding-top:calc(var(--ticker-h) + var(--header-h));
+}
 
-      /* Cardboard palette */
-      --cardboard-1: #9a7646;   /* base */
-      --cardboard-2: #8a673c;   /* shade */
-      --cardboard-3: #b68957;   /* highlight */
-      --ink: rgba(35, 25, 15, 0.55);
-      --ink-strong: rgba(35, 25, 15, 0.75);
-      --tape: rgba(255, 255, 255, 0.08);
-      --tape-edge: rgba(0, 0, 0, 0.18);
-    }
+/* ================= BACKGROUND BOXES ================= */
+.boxes-bg{
+  position:fixed;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  overflow:hidden;
+}
 
-    body{
-      font-family: Arial, sans-serif;
-      background: var(--bg-black);
-      color: var(--text-main);
-      padding-top: calc(var(--ticker-h) + var(--header-h));
-    }
+.box{
+  position:absolute;
+  border-radius:0;
+  border:1px solid rgba(0,0,0,.28);
+  background-image:
+    linear-gradient(to bottom,
+      transparent 0%,
+      transparent 44%,
+      rgba(255,255,255,.06) 44%,
+      rgba(255,255,255,.06) 58%,
+      transparent 58%,
+      transparent 100%
+    ),
+    linear-gradient(to bottom,
+      transparent 50.7%,
+      rgba(0,0,0,.28) 50.7%,
+      rgba(0,0,0,.28) 52%,
+      transparent 52%
+    ),
+    repeating-linear-gradient(
+      45deg,
+      rgba(255,255,255,.01) 0px,
+      rgba(0,0,0,.01) 6px
+    ),
+    linear-gradient(135deg,#b98956 0%,#9a7646 38%,#87643a 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.08),
+    inset 0 -2px 0 rgba(0,0,0,.18),
+    0 20px 60px rgba(0,0,0,.75);
+  opacity:.92;
+  will-change:transform;
+}
 
-    /* =====================
-       RANDOM BOXES BACKGROUND (CARDBOARD BOXES)
-       ===================== */
-    .boxes-bg{
-      position: fixed;
-      inset: 0;
-      z-index: 1;
-      pointer-events: none;
-      overflow: hidden;
-    }
+/* cube shading */
+.box::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(to bottom,rgba(255,255,255,.08),transparent 26%),
+    linear-gradient(to right,rgba(255,255,255,.06),transparent 22%),
+    linear-gradient(to left,rgba(0,0,0,.14),transparent 26%),
+    linear-gradient(to top,rgba(0,0,0,.16),transparent 28%);
+}
 
-    .box{
-      position: absolute;
-      border-radius: 0; /* NO rounded corners */
+/* icon only */
+.box::after{
+  content:"";
+  position:absolute;
+  width:22%;
+  aspect-ratio:1;
+  left:8%;
+  bottom:10%;
+  opacity:.55;
+  background-size:contain;
+  background-repeat:no-repeat;
+  background-position:center;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cg fill='none' stroke='%2323180F' stroke-opacity='0.7' stroke-width='4'%3E%3Cpath d='M20 40V18M20 18l-6 6M20 18l6 6M44 40V18M44 18l-6 6M44 18l6 6'/%3E%3C/g%3E%3Crect x='10' y='10' width='44' height='44' fill='none' stroke='%2323180F' stroke-opacity='0.35' stroke-width='3'/%3E%3C/svg%3E");
+}
 
-      /* CARD BOARD look:
-         - base gradient
-         - subtle fiber/noise stripes
-         - straight tape stripe (center)
-         - barcode block (bottom-right)
-      */
-      background-image:
-        /* tape stripe (straight & ровная) */
-        linear-gradient(
-          to bottom,
-          transparent 0%,
-          transparent 44%,
-          var(--tape) 44%,
-          var(--tape) 58%,
-          transparent 58%,
-          transparent 100%
-        ),
+/* animations */
+@keyframes drop{
+  from{transform:translate3d(var(--x0),-140px,0) rotate(var(--r0))}
+  to{transform:translate3d(var(--x1),calc(100vh + 180px),0) rotate(var(--r1))}
+}
 
-        /* tape edges */
-        linear-gradient(
-          to bottom,
-          transparent 0%,
-          transparent 43.5%,
-          var(--tape-edge) 43.5%,
-          transparent 45%,
-          transparent 57%,
-          var(--tape-edge) 57%,
-          transparent 58.5%,
-          transparent 100%
-        ),
+/* ================= TICKER ================= */
+.ticker{
+  position:fixed;
+  top:0;left:0;
+  width:100%;
+  height:var(--ticker-h);
+  background:#000;
+  z-index:1200;
+  display:flex;
+  align-items:center;
+  overflow:hidden;
+  font-size:14px;
+}
 
-        /* barcode block (bottom-right) */
-        linear-gradient(to right,
-          transparent 0%,
-          transparent 65%,
-          rgba(255,255,255,0.02) 65%,
-          rgba(255,255,255,0.02) 100%
-        ),
-        repeating-linear-gradient(
-          to right,
-          transparent 0px,
-          transparent 78%,
-          rgba(20, 14, 8, 0.38) 78%,
-          rgba(20, 14, 8, 0.38) 79.5%,
-          transparent 79.5%,
-          transparent 81%
-        ),
+.ticker__content{
+  white-space:nowrap;
+  padding-left:100%;
+  animation:ticker 18s linear infinite;
+}
 
-        /* fiber/noise (subtle) */
-        repeating-linear-gradient(
-          45deg,
-          rgba(255,255,255,0.03) 0px,
-          rgba(255,255,255,0.03) 2px,
-          rgba(0,0,0,0.02) 2px,
-          rgba(0,0,0,0.02) 5px
-        ),
+@keyframes ticker{
+  from{transform:translateX(0)}
+  to{transform:translateX(-100%)}
+}
 
-        /* base cardboard gradient */
-        linear-gradient(135deg, var(--cardboard-3) 0%, var(--cardboard-1) 35%, var(--cardboard-2) 100%);
+/* ================= GLASS HEADER ================= */
+header{
+  position:fixed;
+  top:var(--ticker-h);
+  left:0;
+  width:100%;
+  height:var(--header-h);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 16px;
+  z-index:1100;
 
-      /* outline + depth */
-      border: 1px solid rgba(0,0,0,0.28);
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.10),
-        inset 0 -2px 0 rgba(0,0,0,0.20),
-        0 20px 60px rgba(0,0,0,0.75);
+  background:rgba(255,255,255,.12);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid rgba(255,255,255,.25);
+}
 
-      opacity: 0.92;
-      will-change: transform;
-    }
+.logo{width:180px}
 
-    /* Extra “cube form” illusion: top/left face highlight + right/bottom shade */
-    .box::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      pointer-events:none;
+/* ================= BURGER ================= */
+.burger{
+  width:28px;
+  height:28px;
+  background:none;
+  border:none;
+  cursor:pointer;
+  position:relative;
+  -webkit-tap-highlight-color:transparent;
+}
 
-      background:
-        /* top highlight edge */
-        linear-gradient(to bottom, rgba(255,255,255,0.12), transparent 28%),
-        /* left highlight edge */
-        linear-gradient(to right, rgba(255,255,255,0.10), transparent 24%),
-        /* right shade edge */
-        linear-gradient(to left, rgba(0,0,0,0.18), transparent 28%),
-        /* bottom shade edge */
-        linear-gradient(to top, rgba(0,0,0,0.20), transparent 30%);
-      mix-blend-mode: multiply;
-      opacity: 0.9;
-    }
+.burger:focus-visible{outline:none}
 
-    /* Markings / stamps */
-    .box::after{
-      content:"↑ THIS SIDE UP  •  FRAGILE";
-      position:absolute;
-      left: 10px;
-      bottom: 10px;
-      font-size: 10px;
-      letter-spacing: 0.08em;
-      color: var(--ink);
-      text-transform: uppercase;
-      text-shadow: 0 1px 0 rgba(255,255,255,0.06);
-      white-space: nowrap;
-      opacity: 0.9;
-    }
+.burger span{
+  position:absolute;
+  left:0;
+  width:100%;
+  height:2px;
+  background:#fff;
+  transition:.25s;
+}
 
-    /* Falling motion */
-    @keyframes drop {
-      0%   { transform: translate3d(var(--x0), -140px, 0) rotate(var(--r0)); }
-      100% { transform: translate3d(var(--x1), calc(100vh + 180px), 0) rotate(var(--r1)); }
-    }
+.burger span:nth-child(1){top:7px}
+.burger span:nth-child(2){top:13px}
+.burger span:nth-child(3){top:19px}
 
-    @keyframes wobble {
-      0%,100% { filter: none; }
-      50%     { filter: brightness(1.03); }
-    }
+.burger.active span:nth-child(1){
+  transform:translateY(6px) rotate(45deg)
+}
+.burger.active span:nth-child(2){
+  opacity:0
+}
+.burger.active span:nth-child(3){
+  transform:translateY(-6px) rotate(-45deg)
+}
 
-    @media (prefers-reduced-motion: reduce){
-      .box{ animation: none !important; }
-      .ticker__content{ animation: none !important; padding-left: 0 !important; }
-    }
+/* ================= MENU ================= */
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.45);
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+  z-index:1000;
+}
+.overlay.active{opacity:1;pointer-events:auto}
 
-    /* =====================
-       TICKER (RUNNING BAR)
-       ===================== */
-    .ticker{
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%;
-      height: var(--ticker-h);
-      background: #000;
-      color: #fff;
-      z-index: 1200;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      font-size: 14px;
-    }
+nav.mobile-menu{
+  position:fixed;
+  right:0;
+  top:0;
+  height:100vh;
+  width:min(82vw,360px);
+  background:#fff;
+  transform:translateX(100%);
+  transition:.25s;
+  z-index:1050;
+  padding:calc(var(--ticker-h) + var(--header-h) + 24px) 20px;
+}
+nav.mobile-menu.active{transform:translateX(0)}
+nav.mobile-menu a{
+  display:block;
+  color:#000;
+  text-decoration:none;
+  font-size:18px;
+  margin-bottom:16px;
+}
 
-    .ticker__track{ width: 100%; overflow: hidden; }
+body.menu-open{overflow:hidden}
 
-    .ticker__content{
-      display: inline-flex;
-      gap: 18px;
-      white-space: nowrap;
-      padding-left: 100%;
-      will-change: transform;
-      animation: ticker-move 18s linear infinite;
-    }
+/* ================= CONTENT ================= */
+main{
+  position:relative;
+  z-index:5;
+  padding:24px;
+  max-width:1200px;
+  margin:auto;
+}
 
-    @keyframes ticker-move{
-      from { transform: translateX(0); }
-      to   { transform: translateX(-100%); }
-    }
+.section{
+  background:rgba(10,10,10,.55);
+  border:1px solid rgba(255,255,255,.06);
+  padding:22px;
+  margin-bottom:18px;
+}
 
-    /* ==========
-       HEADER
-       ========== */
-    header{
-      position: fixed;
-      top: var(--ticker-h);
-      left: 0;
-      width: 100%;
-      height: var(--header-h);
-      background: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 16px;
-      border-bottom: 1px solid #eaeaea;
-      z-index: 1100;
-    }
-
-    .logo{
-      width: 180px;
-      height: auto;
-      display: block;
-    }
-
-    /* ==========
-       BURGER (perfect X)
-       ========== */
-    .burger{
-      position: relative;
-      width: 28px;
-      height: 28px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .burger:focus-visible{ outline: none; }
-
-    .burger span{
-      position: absolute;
-      left: 0;
-      width: 100%;
-      height: 2px;
-      background: #000;
-      border-radius: 0; /* sharp ends */
-      transition: transform 0.25s ease, opacity 0.2s ease;
-      transform-origin: center;
-    }
-
-    .burger span:nth-child(1){ top: 7px; }
-    .burger span:nth-child(2){ top: 13px; }
-    .burger span:nth-child(3){ top: 19px; }
-
-    .burger.active span:nth-child(1){
-      transform: translateY(6px) rotate(45deg);
-    }
-
-    .burger.active span:nth-child(2){
-      opacity: 0;
-    }
-
-    .burger.active span:nth-child(3){
-      transform: translateY(-6px) rotate(-45deg);
-    }
-
-    /* ==========
-       OVERLAY
-       ========== */
-    .overlay{
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.45);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.25s ease;
-      z-index: 1000;
-    }
-
-    .overlay.active{
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    /* ==========
-       MOBILE MENU (fixed; stays right)
-       ========== */
-    nav.mobile-menu{
-      position: fixed;
-      top: 0;
-      right: 0;
-      height: 100vh;
-      width: min(82vw, 360px);
-      background: #fff;
-      transform: translateX(100%);
-      transition: transform 0.25s ease;
-      z-index: 1050;
-      padding: calc(var(--ticker-h) + var(--header-h) + 24px) 20px 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-      box-shadow: -8px 0 24px rgba(0,0,0,0.12);
-    }
-
-    nav.mobile-menu.active{ transform: translateX(0); }
-
-    nav.mobile-menu a{
-      text-decoration: none;
-      color: #000;
-      font-size: 18px;
-    }
-
-    body.menu-open{
-      overflow: hidden;
-      touch-action: none;
-    }
-
-    /* ==========
-       CONTENT
-       ========== */
-    main{
-      position: relative;
-      z-index: 5; /* above boxes */
-      padding: 24px;
-      max-width: 1200px;
-      margin: 0 auto;
-      min-height: 100vh;
-    }
-
-    .section{
-      background: rgba(10,10,10,0.55);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 0; /* sharp */
-      padding: 22px;
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.03),
-        0 18px 50px rgba(0,0,0,0.65);
-      margin-bottom: 18px;
-      backdrop-filter: blur(2px);
-    }
-
-    .section h1, .section h2{
-      margin-bottom: 10px;
-      color: var(--text-main);
-    }
-
-    .section p{
-      color: var(--text-muted);
-      line-height: 1.55;
-    }
-
-    /* DESKTOP: hide burger/menu/overlay */
-    @media (min-width: 769px){
-      .burger, .overlay, nav.mobile-menu{ display: none; }
-    }
-  </style>
+/* desktop */
+@media(min-width:769px){
+  .burger,.overlay,nav.mobile-menu{display:none}
+}
+</style>
 </head>
 
 <body>
 
-  <!-- Random boxes background -->
-  <div class="boxes-bg" aria-hidden="true" id="boxesBg"></div>
+<div class="boxes-bg" id="boxesBg"></div>
 
-  <!-- Ticker -->
-  <div class="ticker">
-    <div class="ticker__track">
-      <div class="ticker__content">
-        <span>📦 Amazon Prep Center in Brooklyn •</span>
-        <span>✅ Receiving • Labeling • Bundling •</span>
-        <span>🚚 Fast turnaround •</span>
-        <span>📩 Contact us today •</span>
-
-        <span>📦 Amazon Prep Center in Brooklyn •</span>
-        <span>✅ Receiving • Labeling • Bundling •</span>
-        <span>🚚 Fast turnaround •</span>
-        <span>📩 Contact us today •</span>
-      </div>
-    </div>
+<div class="ticker">
+  <div class="ticker__content">
+    📦 Amazon Prep Center in Brooklyn • Receiving • Labeling • Bundling •
   </div>
+</div>
 
-  <!-- Header -->
-  <header>
-    <img src="logo.png" alt="PrepNest NY" class="logo" />
-    <button class="burger" aria-label="Menu" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-  </header>
+<header>
+  <img src="logo.png" class="logo" alt="PrepNest NY">
+  <button class="burger">
+    <span></span><span></span><span></span>
+  </button>
+</header>
 
-  <!-- Overlay -->
-  <div class="overlay" id="overlay"></div>
+<div class="overlay" id="overlay"></div>
 
-  <!-- Mobile Menu -->
-  <nav class="mobile-menu" id="mobileMenu">
-    <a href="#home">Home</a>
-    <a href="#services">Services</a>
-    <a href="#pricing">Pricing</a>
-    <a href="#contact">Contact</a>
-  </nav>
+<nav class="mobile-menu" id="menu">
+  <a href="#">Home</a>
+  <a href="#">Services</a>
+  <a href="#">Pricing</a>
+  <a href="#">Contact</a>
+</nav>
 
-  <!-- Content -->
-  <main>
-    <section class="section" id="home">
-      <h1>PrepNest NY</h1>
-      <p>Amazon prep services in New York — receiving, labeling, bundling, and fast turnaround.</p>
-    </section>
+<main>
+  <div class="section"><h1>PrepNest NY</h1></div>
+</main>
 
-    <section class="section" id="services">
-      <h2>Services</h2>
-      <p>Inbound receiving, inspection, labeling (FNSKU / warnings), polybagging, bundling, and outbound-ready packaging.</p>
-    </section>
+<script>
+const burger=document.querySelector('.burger')
+const menu=document.getElementById('menu')
+const overlay=document.getElementById('overlay')
 
-    <section class="section" id="pricing">
-      <h2>Pricing</h2>
-      <p>Simple pricing based on item count and prep requirements. Add your real pricing blocks later.</p>
-    </section>
+burger.onclick=()=>{
+  burger.classList.toggle('active')
+  menu.classList.toggle('active')
+  overlay.classList.toggle('active')
+  document.body.classList.toggle('menu-open')
+}
 
-    <section class="section" id="contact">
-      <h2>Contact</h2>
-      <p>Add your email/phone or a contact form here.</p>
-    </section>
-  </main>
+overlay.onclick=()=>burger.onclick()
 
-  <script>
-    /* =========================
-       Mobile menu open/close
-       ========================= */
-    const burger = document.querySelector('.burger');
-    const menu = document.getElementById('mobileMenu');
-    const overlay = document.getElementById('overlay');
-
-    function openMenu() {
-      burger.classList.add('active');
-      menu.classList.add('active');
-      overlay.classList.add('active');
-      document.body.classList.add('menu-open');
-      burger.setAttribute('aria-expanded', 'true');
-    }
-
-    function closeMenu() {
-      burger.classList.remove('active');
-      menu.classList.remove('active');
-      overlay.classList.remove('active');
-      document.body.classList.remove('menu-open');
-      burger.setAttribute('aria-expanded', 'false');
-    }
-
-    burger.addEventListener('click', () => {
-      burger.classList.contains('active') ? closeMenu() : openMenu();
-    });
-
-    overlay.addEventListener('click', closeMenu);
-
-    menu.addEventListener('click', e => {
-      if (e.target.tagName === 'A') closeMenu();
-    });
-
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') closeMenu();
-    });
-
-    /* =========================
-       Random falling/rolling cardboard boxes
-       ========================= */
-    (function(){
-      const bg = document.getElementById('boxesBg');
-      if (!bg) return;
-
-      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const isMobile = window.matchMedia('(max-width: 768px)').matches;
-
-      const count = isMobile ? 14 : 22;
-      const minSize = isMobile ? 54 : 70;
-      const maxSize = isMobile ? 130 : 170;
-
-      function rand(min, max){ return Math.random() * (max - min) + min; }
-      function randi(min, max){ return Math.floor(rand(min, max)); }
-
-      function makeBox(){
-        const el = document.createElement('div');
-        el.className = 'box';
-
-        const size = randi(minSize, maxSize);
-        el.style.width = size + 'px';
-        el.style.height = size + 'px';
-
-        const x0 = rand(-60, window.innerWidth + 60);
-        const xDrift = rand(-170, 170);
-        const x1 = x0 + xDrift;
-
-        const r0 = rand(-18, 18) + 'deg';
-        const spins = rand(380, 900) * (Math.random() < 0.5 ? -1 : 1);
-        const r1 = `calc(${r0} + ${spins}deg)`;
-
-        const duration = rand(10, 19);
-        const delay = rand(0, 6);
-        const depth = rand(0.70, 1.0);
-
-        el.style.opacity = String(0.55 + depth * 0.45);
-
-        el.style.setProperty('--x0', x0 + 'px');
-        el.style.setProperty('--x1', x1 + 'px');
-        el.style.setProperty('--r0', r0);
-        el.style.setProperty('--r1', r1);
-
-        /* Make tape stripe perfectly level (no rotation): randomize its position a bit but keep it straight */
-        const tapeTop = Math.floor(rand(34, 50)); // percent
-        el.style.backgroundImage = el.style.backgroundImage; // keep composed backgrounds
-        el.style.setProperty('--tapeTop', tapeTop + '%');
-
-        if (!prefersReduced){
-          el.style.animation =
-            `drop ${duration}s linear ${delay}s infinite, wobble ${rand(2.5,5)}s ease-in-out ${rand(0,2)}s infinite`;
-        }
-
-        bg.appendChild(el);
-      }
-
-      function rebuild(){
-        bg.innerHTML = '';
-        for (let i = 0; i < count; i++) makeBox();
-      }
-
-      rebuild();
-
-      let t;
-      window.addEventListener('resize', () => {
-        clearTimeout(t);
-        t = setTimeout(rebuild, 250);
-      });
-    })();
-  </script>
+/* boxes */
+const bg=document.getElementById('boxesBg')
+for(let i=0;i<18;i++){
+  const b=document.createElement('div')
+  b.className='box'
+  const s=60+Math.random()*100
+  b.style.width=b.style.height=s+'px'
+  const x=Math.random()*window.innerWidth
+  b.style.setProperty('--x0',x+'px')
+  b.style.setProperty('--x1',(x+(Math.random()*200-100))+'px')
+  b.style.setProperty('--r0',(Math.random()*20-10)+'deg')
+  b.style.setProperty('--r1',(Math.random()*720)+'deg')
+  b.style.animation=`drop ${10+Math.random()*8}s linear ${Math.random()*5}s infinite`
+  bg.appendChild(b)
+}
+</script>
 
 </body>
 </html>
