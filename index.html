@@ -19,10 +19,10 @@
   --cardboard-2:#87643a;
   --cardboard-3:#b98956;
 
-  /* page glass */
+  /* page glass (DO NOT TOUCH) */
   --page-glass: rgba(10,10,10,0.55);
 
-  /* glass header/menu */
+  /* glass header/menu (DO NOT TOUCH) */
   --glass-white: rgba(255,255,255,0.12);
   --glass-border: rgba(255,255,255,0.25);
 }
@@ -36,8 +36,8 @@ body{
   min-height: 100vh;
 }
 
-/* ================= BACKGROUND BOXES ================= */
-.boxes-bg{
+/* ================= CONVEYOR BACKGROUND ================= */
+.conveyor-stage{
   position: fixed;
   inset: 0;
   z-index: 1;
@@ -45,14 +45,110 @@ body{
   overflow: hidden;
 }
 
+/* vertical conveyor belt area (top view) */
+.conveyor{
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(520px, 86vw);
+
+  /* matte black base + subtle metal */
+  background:
+    linear-gradient(to right,
+      rgba(255,255,255,0.05) 0%,
+      rgba(255,255,255,0.02) 12%,
+      rgba(0,0,0,0.00) 50%,
+      rgba(255,255,255,0.02) 88%,
+      rgba(255,255,255,0.05) 100%
+    ),
+    linear-gradient(#0b0b0b, #050505);
+
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.06),
+    inset 0 40px 80px rgba(255,255,255,0.04),
+    0 0 0 1px rgba(0,0,0,0.6);
+
+  /* slightly soften edges into the matte background */
+  border-left: 1px solid rgba(255,255,255,0.08);
+  border-right: 1px solid rgba(255,255,255,0.08);
+}
+
+/* conveyor side rails */
+.conveyor::before,
+.conveyor::after{
+  content:"";
+  position:absolute;
+  top:0; bottom:0;
+  width: 10px;
+  background: linear-gradient(#141414, #070707);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06);
+  opacity: .9;
+}
+.conveyor::before{ left: -12px; }
+.conveyor::after { right: -12px; }
+
+/* moving belt texture (subtle stripes) */
+.belt-texture{
+  position:absolute;
+  inset:0;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,0.045) 0px,
+      rgba(255,255,255,0.045) 10px,
+      rgba(0,0,0,0.00) 10px,
+      rgba(0,0,0,0.00) 26px
+    );
+  opacity: .45;
+  transform: translateY(0);
+  animation: beltMove 1.25s linear infinite;
+}
+@keyframes beltMove{
+  from{ transform: translateY(0); }
+  to{ transform: translateY(26px); }
+}
+
+/* lane guides */
+.lane-guides{
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(to right,
+      transparent 0%,
+      transparent 12%,
+      rgba(255,255,255,0.05) 12%,
+      transparent 13%,
+      transparent 87%,
+      rgba(255,255,255,0.05) 87%,
+      transparent 88%,
+      transparent 100%
+    );
+  opacity:.6;
+}
+
+/* boxes container clipped to conveyor */
+.boxes-track{
+  position:absolute;
+  top:0; bottom:0;
+  left:0; right:0;
+  overflow:hidden;
+}
+
+/* cardboard box top-view */
 .box{
   position:absolute;
-  border-radius:0;
-  border:1px solid rgba(0,0,0,.30);
-  opacity: 1; /* not transparent */
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 0;
+  opacity: 1;
 
+  border: 1px solid rgba(0,0,0,0.35);
+
+  /* cardboard + tape + seam (center line) */
   background-image:
-    /* tape */
+    /* tape area: horizontal across the box */
     linear-gradient(to bottom,
       transparent 0%,
       transparent 44%,
@@ -61,7 +157,7 @@ body{
       transparent 58%,
       transparent 100%
     ),
-    /* tape seam (center line) */
+    /* seam: thin dark line in the middle of the tape */
     linear-gradient(to bottom,
       transparent 0%,
       transparent 50.8%,
@@ -75,7 +171,7 @@ body{
       rgba(255,255,255,.010) 0px,
       rgba(0,0,0,.010) 7px
     ),
-    /* cardboard base */
+    /* base */
     linear-gradient(135deg,
       var(--cardboard-3) 0%,
       var(--cardboard-1) 38%,
@@ -85,11 +181,10 @@ body{
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.08),
     inset 0 -2px 0 rgba(0,0,0,.18),
-    0 20px 60px rgba(0,0,0,.75);
-
-  will-change: transform;
+    0 14px 26px rgba(0,0,0,0.55);
 }
 
+/* subtle top-view lighting */
 .box::before{
   content:"";
   position:absolute;
@@ -102,6 +197,7 @@ body{
     linear-gradient(to top,rgba(0,0,0,.16),transparent 28%);
 }
 
+/* this-side-up icon only */
 .box::after{
   content:"";
   position:absolute;
@@ -116,12 +212,13 @@ body{
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cg fill='none' stroke='%2323180F' stroke-opacity='0.7' stroke-width='4'%3E%3Cpath d='M20 40V18M20 18l-6 6M20 18l6 6M44 40V18M44 18l-6 6M44 18l6 6'/%3E%3C/g%3E%3Crect x='10' y='10' width='44' height='44' fill='none' stroke='%2323180F' stroke-opacity='0.35' stroke-width='3'/%3E%3C/svg%3E");
 }
 
-@keyframes drop{
-  from{transform:translate3d(var(--x0),-140px,0) rotate(var(--r0))}
-  to{transform:translate3d(var(--x1),calc(100vh + 180px),0) rotate(var(--r1))}
+/* each box moves down the conveyor */
+@keyframes boxMove{
+  from { transform: translateX(-50%) translateY(-160px); }
+  to   { transform: translateX(-50%) translateY(calc(100vh + 200px)); }
 }
 
-/* ================= PAGE GLASS (NOT UNDER HEADER) ================= */
+/* ================= PAGE GLASS (DO NOT TOUCH) ================= */
 .page-glass{
   position: fixed;
   left: 0;
@@ -161,7 +258,7 @@ body{
   to{transform:translateX(-100%)}
 }
 
-/* ================= GLASS HEADER ================= */
+/* ================= GLASS HEADER (DO NOT TOUCH) ================= */
 header{
   position: fixed;
   top: var(--ticker-h);
@@ -179,22 +276,20 @@ header{
   -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--glass-border);
 
-  overflow: hidden; /* prevents logo overflow */
+  overflow:hidden;
 }
 
-/* ✅ FIXED LOGO (never grows, never leaves header) */
+/* logo locked */
 .logo{
   display:block;
-  height: auto;
-  width: auto;
-
-  max-height: calc(var(--header-h) - 18px); /* hard limit */
-  object-fit: contain;
-
+  max-height: calc(var(--header-h) - 18px);
+  width:auto;
+  height:auto;
+  object-fit:contain;
   filter: drop-shadow(0 2px 10px rgba(0,0,0,0.35));
 }
 
-/* ================= BURGER (WHITE) ================= */
+/* burger white */
 .burger{
   width:28px;height:28px;
   background:none;border:none;
@@ -218,7 +313,7 @@ header{
 .burger.active span:nth-child(2){opacity:0}
 .burger.active span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
 
-/* ================= OVERLAY ================= */
+/* overlay */
 .overlay{
   position:fixed; inset:0;
   background:rgba(0,0,0,.45);
@@ -229,7 +324,7 @@ header{
 }
 .overlay.active{opacity:1;pointer-events:auto}
 
-/* ================= MOBILE MENU (NEW STYLE) ================= */
+/* mobile menu glass (same as header) */
 nav.mobile-menu{
   position:fixed;
   right:0; top:0;
@@ -250,7 +345,6 @@ nav.mobile-menu{
 }
 nav.mobile-menu.active{transform:translateX(0)}
 
-/* Menu title */
 .menu-title{
   font-size: 13px;
   letter-spacing: .18em;
@@ -258,8 +352,6 @@ nav.mobile-menu.active{transform:translateX(0)}
   opacity: .75;
   margin: 4px 4px 14px;
 }
-
-/* Bigger, cleaner items */
 nav.mobile-menu a{
   display:flex;
   align-items:center;
@@ -268,8 +360,8 @@ nav.mobile-menu a{
   color:#fff;
   text-decoration:none;
 
-  font-size: 20px;          /* ✅ larger */
-  font-weight: 600;         /* ✅ better */
+  font-size: 20px;
+  font-weight: 600;
   letter-spacing: .02em;
 
   padding: 14px 14px;
@@ -280,32 +372,17 @@ nav.mobile-menu a{
   transition: transform .15s ease, background .15s ease, border-color .15s ease;
   text-shadow: 0 2px 10px rgba(0,0,0,0.35);
 }
-
-nav.mobile-menu a:active{
-  transform: scale(0.99);
-}
-
 nav.mobile-menu a:hover{
   background: rgba(0,0,0,0.30);
   border-color: rgba(255,255,255,0.18);
 }
-
-/* small arrow */
-nav.mobile-menu a .arrow{
-  opacity:.75;
-  font-size: 18px;
-}
-
-/* optional small subtitle line under menu items (if you want later) */
-.menu-sub{
-  font-size: 14px;
-  opacity: .70;
-  margin: 10px 4px 0;
-}
+nav.mobile-menu a:active{ transform: scale(0.99); }
+nav.mobile-menu a .arrow{ opacity:.75; font-size:18px; }
+.menu-sub{ font-size:14px; opacity:.70; margin:10px 4px 0; }
 
 body.menu-open{overflow:hidden}
 
-/* ================= CONTENT ================= */
+/* content */
 main{
   position: relative;
   z-index: 5;
@@ -319,20 +396,36 @@ main{
 @media(min-width:769px){
   .burger,.overlay,nav.mobile-menu{display:none}
 }
+
+/* small screens: narrower conveyor */
+@media(max-width:420px){
+  .conveyor{ width: 92vw; }
+}
 </style>
 </head>
 
 <body>
 
-<div class="boxes-bg" id="boxesBg"></div>
+<!-- Conveyor stage -->
+<div class="conveyor-stage" aria-hidden="true">
+  <div class="conveyor">
+    <div class="belt-texture"></div>
+    <div class="lane-guides"></div>
+    <div class="boxes-track" id="boxesTrack"></div>
+  </div>
+</div>
+
+<!-- Page glass (DO NOT TOUCH) -->
 <div class="page-glass" aria-hidden="true"></div>
 
+<!-- Ticker -->
 <div class="ticker">
   <div class="ticker__content">
     📦 Amazon Prep Center in Brooklyn • Receiving • Labeling • Bundling •
   </div>
 </div>
 
+<!-- Header (glass) -->
 <header>
   <img src="logo.png" class="logo" alt="PrepNest NY">
   <button class="burger" aria-label="Menu" aria-expanded="false">
@@ -344,20 +437,17 @@ main{
 
 <nav class="mobile-menu" id="menu">
   <div class="menu-title">Navigation</div>
-
   <a href="#home"><span>Home</span><span class="arrow">›</span></a>
   <a href="#services"><span>Services</span><span class="arrow">›</span></a>
   <a href="#pricing"><span>Pricing</span><span class="arrow">›</span></a>
   <a href="#contact"><span>Contact</span><span class="arrow">›</span></a>
-
   <div class="menu-sub">Quick access — tap any section.</div>
 </nav>
 
-<main id="home">
-  <!-- empty for now -->
-</main>
+<main id="home"></main>
 
 <script>
+/* menu */
 const burger=document.querySelector('.burger');
 const menu=document.getElementById('menu');
 const overlay=document.getElementById('overlay');
@@ -369,7 +459,6 @@ function toggleMenu(){
   document.body.classList.toggle('menu-open', open);
   burger.setAttribute('aria-expanded', open ? 'true' : 'false');
 }
-
 burger.addEventListener('click', toggleMenu);
 overlay.addEventListener('click', () => {
   if (burger.classList.contains('active')) toggleMenu();
@@ -378,37 +467,60 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape' && burger.classList.contains('active')) toggleMenu();
 });
 
-/* boxes */
+/* conveyor boxes (top view moving down) */
 (function(){
-  const bg=document.getElementById('boxesBg');
+  const track = document.getElementById('boxesTrack');
+  const isMobile = window.matchMedia('(max-width: 768px)').matches;
+
+  const BOX_COUNT = isMobile ? 8 : 10;     // how many boxes on belt
+  const SPEED_SEC = isMobile ? 7.5 : 8.5;  // belt speed
 
   function rand(min,max){ return Math.random()*(max-min)+min; }
 
+  function createBox(i){
+    const b = document.createElement('div');
+    b.className = 'box';
+
+    // sizes that fit inside belt
+    const w = rand(140, 220);
+    const h = rand(110, 180);
+    b.style.width = w + 'px';
+    b.style.height = h + 'px';
+
+    // tiny rotation for realism (top view)
+    const rot = rand(-2.4, 2.4);
+    // add sideways offset within belt lane
+    const side = rand(-22, 22);
+
+    // staggered starting positions
+    const startDelay = -(SPEED_SEC / BOX_COUNT) * i;
+
+    b.style.animation = `boxMove ${SPEED_SEC}s linear ${startDelay}s infinite`;
+    b.style.transform = `translateX(-50%) translateY(-160px) rotate(${rot}deg) translateX(${side}px)`;
+
+    // IMPORTANT: keep the animation transform correct with CSS variable approach
+    // We'll store rotate/side in CSS vars and let keyframes move translateY.
+    b.style.setProperty('--rot', rot + 'deg');
+    b.style.setProperty('--side', side + 'px');
+
+    return b;
+  }
+
+  // Override keyframes transform to include rotate/side always:
+  // (We do it via a dynamic style tag for simplicity.)
+  const styleTag = document.createElement('style');
+  styleTag.textContent = `
+    @keyframes boxMove{
+      from { transform: translateX(-50%) translateY(-160px) rotate(var(--rot)) translateX(var(--side)); }
+      to   { transform: translateX(-50%) translateY(calc(100vh + 200px)) rotate(var(--rot)) translateX(var(--side)); }
+    }
+  `;
+  document.head.appendChild(styleTag);
+
   function build(){
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    const count = isMobile ? 14 : 20;
-
-    bg.innerHTML='';
-
-    for(let i=0;i<count;i++){
-      const b=document.createElement('div');
-      b.className='box';
-
-      const size = rand(60, 160);
-      b.style.width = size + 'px';
-      b.style.height = size + 'px';
-
-      const x0 = rand(-60, window.innerWidth + 60);
-      const x1 = x0 + rand(-160, 160);
-
-      b.style.setProperty('--x0', x0 + 'px');
-      b.style.setProperty('--x1', x1 + 'px');
-      b.style.setProperty('--r0', rand(-14, 14) + 'deg');
-      b.style.setProperty('--r1', rand(360, 900) + 'deg');
-
-      b.style.animation = `drop ${rand(10,18)}s linear ${rand(0,6)}s infinite`;
-
-      bg.appendChild(b);
+    track.innerHTML = '';
+    for(let i=0;i<BOX_COUNT;i++){
+      track.appendChild(createBox(i));
     }
   }
 
@@ -417,7 +529,7 @@ document.addEventListener('keydown', (e) => {
   let t;
   window.addEventListener('resize', () => {
     clearTimeout(t);
-    t=setTimeout(build, 250);
+    t = setTimeout(() => build(), 250);
   });
 })();
 </script>
