@@ -7,11 +7,7 @@
 
   <style>
     /* RESET */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       font-family: Arial, sans-serif;
@@ -21,11 +17,10 @@
     /* HEADER */
     header {
       position: fixed;
-      top: 0;
-      left: 0;
+      top: 0; left: 0;
       width: 100%;
       height: 64px;
-      background: #ffffff;
+      background: #fff;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -38,63 +33,108 @@
     .logo {
       width: 180px;
       height: auto;
+      display: block;
     }
 
-    /* BURGER BUTTON */
+    /* BURGER */
     .burger {
       width: 32px;
       height: 24px;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: center;
+      gap: 6px;
       background: none;
       border: none;
       cursor: pointer;
+      padding: 0;
     }
 
     .burger span {
-      height: 3px;
+      height: 2px; /* thinner lines */
       width: 100%;
       background: #000;
       border-radius: 2px;
-      transition: 0.3s;
+      transition: transform 0.25s ease, opacity 0.2s ease;
+      transform-origin: center;
     }
 
-    /* MOBILE MENU */
-    nav {
+    .burger.active span:nth-child(1) {
+      transform: translateY(8px) rotate(45deg);
+    }
+
+    .burger.active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .burger.active span:nth-child(3) {
+      transform: translateY(-8px) rotate(-45deg);
+    }
+
+    /* OVERLAY */
+    .overlay {
       position: fixed;
-      top: 64px;
-      right: 0;
-      width: 100%;
-      height: calc(100vh - 64px);
-      background: #ffffff;
-      display: none;
-      flex-direction: column;
-      padding: 24px;
-      z-index: 999;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      z-index: 998;
     }
 
-    nav a {
+    .overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* SLIDE-IN MENU (mobile) */
+    nav.mobile-menu {
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100vh;
+      width: min(82vw, 360px);
+      background: #fff;
+      transform: translateX(100%);
+      transition: transform 0.25s ease;
+      z-index: 999;
+      padding: 88px 20px 24px; /* space for header */
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      box-shadow: -8px 0 24px rgba(0,0,0,0.12);
+    }
+
+    nav.mobile-menu.active {
+      transform: translateX(0);
+    }
+
+    nav.mobile-menu a {
       text-decoration: none;
       color: #000;
-      font-size: 20px;
-      margin-bottom: 20px;
+      font-size: 18px;
     }
 
-    nav.active {
-      display: flex;
+    /* Prevent background scroll when menu open */
+    body.menu-open {
+      overflow: hidden;
+      touch-action: none;
     }
 
     /* DESKTOP */
     @media (min-width: 769px) {
-      .burger {
-        display: none;
-      }
-
-      nav {
-        display: none !important;
-      }
+      .burger { display: none; }
+      .overlay { display: none; }
+      nav.mobile-menu { display: none; }
     }
+
+    /* CONTENT */
+    main {
+      padding: 24px;
+    }
+
+    h1 { margin-bottom: 10px; }
+    p { line-height: 1.5; }
   </style>
 </head>
 
@@ -103,26 +143,80 @@
   <header>
     <img src="logo.png" alt="PrepNest NY" class="logo" />
 
-    <button class="burger" aria-label="Menu">
+    <button class="burger" aria-label="Menu" aria-expanded="false">
       <span></span>
       <span></span>
       <span></span>
     </button>
   </header>
 
-  <nav id="mobileMenu">
-    <a href="#">Home</a>
-    <a href="#">Services</a>
-    <a href="#">Pricing</a>
-    <a href="#">Contact</a>
+  <div class="overlay" id="overlay"></div>
+
+  <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile Menu">
+    <a href="#home">Home</a>
+    <a href="#services">Services</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#contact">Contact</a>
   </nav>
+
+  <main>
+    <h1 id="home">Welcome to PrepNest NY</h1>
+    <p>Your Amazon Prep Center in New York.</p>
+
+    <div style="height: 1200px;"></div>
+
+    <h2 id="services">Services</h2>
+    <p>Inbound receiving, prep, labeling, and outbound shipments.</p>
+
+    <div style="height: 800px;"></div>
+
+    <h2 id="pricing">Pricing</h2>
+    <p>Simple pricing based on item count and prep requirements.</p>
+
+    <div style="height: 800px;"></div>
+
+    <h2 id="contact">Contact</h2>
+    <p>Email / phone / form — add your details here.</p>
+  </main>
 
   <script>
     const burger = document.querySelector('.burger');
     const menu = document.getElementById('mobileMenu');
+    const overlay = document.getElementById('overlay');
 
-    burger.addEventListener('click', () => {
-      menu.classList.toggle('active');
+    function openMenu() {
+      burger.classList.add('active');
+      menu.classList.add('active');
+      overlay.classList.add('active');
+      document.body.classList.add('menu-open');
+      burger.setAttribute('aria-expanded', 'true');
+    }
+
+    function closeMenu() {
+      burger.classList.remove('active');
+      menu.classList.remove('active');
+      overlay.classList.remove('active');
+      document.body.classList.remove('menu-open');
+      burger.setAttribute('aria-expanded', 'false');
+    }
+
+    function toggleMenu() {
+      const isOpen = burger.classList.contains('active');
+      isOpen ? closeMenu() : openMenu();
+    }
+
+    burger.addEventListener('click', toggleMenu);
+
+    overlay.addEventListener('click', closeMenu);
+
+    // Close when clicking a link
+    menu.addEventListener('click', (e) => {
+      if (e.target.tagName === 'A') closeMenu();
+    });
+
+    // Close on ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeMenu();
     });
   </script>
 
