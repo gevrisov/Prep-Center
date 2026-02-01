@@ -286,4 +286,277 @@ header{
 
 /* burger (LEFT) */
 .burger{
-  width:28px;height
+  width:28px;height:28px;
+  background:none;border:none;
+  cursor:pointer;
+  position:relative;
+  -webkit-tap-highlight-color:transparent;
+}
+.burger:focus-visible{outline:none}
+.burger span{
+  position:absolute;left:0;
+  width:100%;height:2px;
+  background:#fff;
+  transition:.25s;
+  border-radius:0;
+}
+.burger span:nth-child(1){top:7px}
+.burger span:nth-child(2){top:13px}
+.burger span:nth-child(3){top:19px}
+.burger.active span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+.burger.active span:nth-child(2){opacity:0}
+.burger.active span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+
+/* logo locked */
+.logo{
+  display:block;
+  max-height: calc(var(--header-h) - 18px);
+  width:auto;
+  height:auto;
+  object-fit:contain;
+  filter: drop-shadow(0 2px 10px rgba(0,0,0,0.35));
+}
+
+/* RIGHT: icon-only (as you asked: one thing only) */
+.user-btn{
+  width:36px;
+  height:36px;
+  border-radius:999px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(0,0,0,0.18);
+
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+
+  transition: background .15s ease, border-color .15s ease, transform .15s ease;
+}
+.user-btn:hover{
+  background: rgba(0,0,0,0.28);
+  border-color: rgba(255,255,255,0.26);
+}
+.user-btn:active{ transform: scale(0.99); }
+.user-btn:focus-visible{ outline:none; }
+
+.user-ico{ width:18px; height:18px; opacity:.95; }
+.user-ico path{ stroke:#fff; }
+
+/* ================= OVERLAY ================= */
+.overlay{
+  position:fixed; inset:0;
+  background:rgba(0,0,0,.45);
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+  z-index:1000;
+}
+.overlay.active{opacity:1;pointer-events:auto}
+
+/* ================= MOBILE MENU (GLASS) ================= */
+nav.mobile-menu{
+  position:fixed;
+  right:0; top:0;
+  height:100vh;
+  width:min(86vw, 380px);
+  background: var(--glass-white);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-left: 1px solid var(--glass-border);
+  transform:translateX(100%);
+  transition: transform .25s ease;
+  z-index:1050;
+  padding: calc(var(--ticker-h) + var(--header-h) + 18px) 18px 22px;
+  box-shadow: -12px 0 30px rgba(0,0,0,.28);
+}
+nav.mobile-menu.active{transform:translateX(0)}
+
+.menu-title{
+  font-size: 13px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  opacity: .75;
+  margin: 4px 4px 14px;
+}
+nav.mobile-menu a{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  color:#fff;
+  text-decoration:none;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: .02em;
+  padding: 14px 14px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(0,0,0,0.22);
+  margin-bottom: 12px;
+  transition: transform .15s ease, background .15s ease, border-color .15s ease;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.35);
+}
+nav.mobile-menu a:hover{
+  background: rgba(0,0,0,0.30);
+  border-color: rgba(255,255,255,0.18);
+}
+nav.mobile-menu a:active{ transform: scale(0.99); }
+nav.mobile-menu a .arrow{ opacity:.75; font-size:18px; }
+.menu-sub{ font-size:14px; opacity:.70; margin:10px 4px 0; }
+
+body.menu-open{overflow:hidden}
+
+/* content */
+main{
+  position: relative;
+  z-index: 5;
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 140vh;
+}
+
+/* desktop */
+@media(min-width:769px){
+  .burger,.overlay,nav.mobile-menu{display:none}
+}
+
+/* tighter on tiny screens */
+@media(max-width:420px){
+  .conveyor{ width: 92vw; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Conveyor stage -->
+<div class="conveyor-stage" aria-hidden="true">
+  <div class="conveyor">
+    <div class="belt-texture"></div>
+    <div class="lane-guides"></div>
+    <div class="boxes-track" id="boxesTrack"></div>
+  </div>
+</div>
+
+<!-- Page glass (DO NOT TOUCH) -->
+<div class="page-glass" aria-hidden="true"></div>
+
+<!-- Ticker -->
+<div class="ticker">
+  <div class="ticker__content">
+    📦 Amazon Prep Center in Brooklyn • Receiving • Labeling • Bundling •
+  </div>
+</div>
+
+<!-- Header -->
+<header>
+  <div class="header-inner">
+    <div class="header-left">
+      <button class="burger" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <div class="header-center">
+      <img src="logo.png" class="logo" alt="PrepNest NY">
+    </div>
+
+    <div class="header-right">
+      <!-- icon only -->
+      <button class="user-btn" aria-label="Log in" type="button">
+        <svg class="user-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M20 21a8 8 0 0 0-16 0" stroke-width="2" stroke-linecap="round"/>
+          <path d="M12 13a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="overlay" id="overlay"></div>
+
+<nav class="mobile-menu" id="menu">
+  <div class="menu-title">Navigation</div>
+  <a href="#home"><span>Home</span><span class="arrow">›</span></a>
+  <a href="#services"><span>Services</span><span class="arrow">›</span></a>
+  <a href="#pricing"><span>Pricing</span><span class="arrow">›</span></a>
+  <a href="#contact"><span>Contact</span><span class="arrow">›</span></a>
+  <div class="menu-sub">Quick access — tap any section.</div>
+</nav>
+
+<main id="home"></main>
+
+<script>
+/* menu */
+const burger=document.querySelector('.burger');
+const menu=document.getElementById('menu');
+const overlay=document.getElementById('overlay');
+
+function toggleMenu(){
+  const open = burger.classList.toggle('active');
+  menu.classList.toggle('active', open);
+  overlay.classList.toggle('active', open);
+  document.body.classList.toggle('menu-open', open);
+  burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+burger.addEventListener('click', toggleMenu);
+overlay.addEventListener('click', () => {
+  if (burger.classList.contains('active')) toggleMenu();
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && burger.classList.contains('active')) toggleMenu();
+});
+
+/* conveyor boxes (top view moving down) */
+(function(){
+  const track = document.getElementById('boxesTrack');
+  function rand(min,max){ return Math.random()*(max-min)+min; }
+  function getBeltSpeed(){
+    return getComputedStyle(document.documentElement)
+      .getPropertyValue('--belt-speed')
+      .trim() || '8.5s';
+  }
+
+  function build(){
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const BOX_COUNT = isMobile ? 8 : 10;
+    const BELT_SPEED = getBeltSpeed();
+
+    track.innerHTML = '';
+
+    for(let i=0;i<BOX_COUNT;i++){
+      const b = document.createElement('div');
+      b.className = 'box';
+
+      const w = rand(140, 220);
+      const h = rand(110, 180);
+      b.style.width = w + 'px';
+      b.style.height = h + 'px';
+
+      const rot = rand(-2.4, 2.4);
+      const side = rand(-22, 22);
+
+      const delaySec = -(parseFloat(BELT_SPEED) / BOX_COUNT) * i;
+
+      b.style.setProperty('--rot', rot + 'deg');
+      b.style.setProperty('--side', side + 'px');
+      b.style.animation = `boxMove ${BELT_SPEED} linear ${delaySec}s infinite`;
+
+      track.appendChild(b);
+    }
+  }
+
+  build();
+
+  let t;
+  window.addEventListener('resize', () => {
+    clearTimeout(t);
+    t = setTimeout(build, 250);
+  });
+})();
+</script>
+
+</body>
+</html>
