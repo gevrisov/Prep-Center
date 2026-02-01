@@ -156,11 +156,22 @@ body{
 .box{
   position:absolute;
   left: 50%;
-  transform: translateX(-50%);
   border-radius: 0;
   opacity: 1;
   border: 1px solid rgba(0,0,0,0.35);
+
+  /* we store base transform in CSS vars so we can add a "nudge" without breaking it */
+  transform:
+    translateX(-50%)
+    rotate(var(--rot, 0deg))
+    translateX(var(--side, 0px))
+    translateX(var(--nudgeX, 0px))
+    rotate(var(--nudgeR, 0deg));
+
+  transition: transform 120ms ease, box-shadow 120ms ease;
+
   background-image:
+    /* tape */
     linear-gradient(to bottom,
       transparent 0%,
       transparent 44%,
@@ -169,6 +180,7 @@ body{
       transparent 58%,
       transparent 100%
     ),
+    /* seam line */
     linear-gradient(to bottom,
       transparent 0%,
       transparent 50.8%,
@@ -177,15 +189,18 @@ body{
       transparent 52.0%,
       transparent 100%
     ),
+    /* weak fibers */
     repeating-linear-gradient(45deg,
       rgba(255,255,255,.010) 0px,
       rgba(0,0,0,.010) 7px
     ),
+    /* base */
     linear-gradient(135deg,
       var(--cardboard-3) 0%,
       var(--cardboard-1) 38%,
       var(--cardboard-2) 100%
     );
+
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.08),
     inset 0 -2px 0 rgba(0,0,0,.18),
@@ -218,7 +233,17 @@ body{
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cg fill='none' stroke='%2323180F' stroke-opacity='0.7' stroke-width='4'%3E%3Cpath d='M20 40V18M20 18l-6 6M20 18l6 6M44 40V18M44 18l-6 6M44 18l6 6'/%3E%3C/g%3E%3Crect x='10' y='10' width='44' height='44' fill='none' stroke='%2323180F' stroke-opacity='0.35' stroke-width='3'/%3E%3C/svg%3E");
 }
 
-/* ================= ROBOT ARM ================= */
+/* when nudged: a tiny realistic shove */
+.box.nudged{
+  --nudgeX: -10px;    /* push left (from right arm) */
+  --nudgeR: -2.4deg;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.08),
+    inset 0 -2px 0 rgba(0,0,0,.18),
+    0 18px 30px rgba(0,0,0,0.62);
+}
+
+/* ================= ROBOT ARM (attached) ================= */
 .robot-arm{
   position:absolute;
   right: -190px;
@@ -238,11 +263,23 @@ body{
   85%  { transform: translateY(4px) rotate(5deg); }
   100% { transform: translateY(0) rotate(-2deg); }
 }
+
+/* extra "punch" motion used only when nudging a box */
+@keyframes armPunch{
+  0%   { transform: translateY(0) rotate(-2deg); }
+  35%  { transform: translateY(6px) rotate(8deg); }
+  60%  { transform: translateY(2px) rotate(2deg); }
+  100% { transform: translateY(0) rotate(-2deg); }
+}
+
 .robot-svg{
   position:absolute;
   inset:0;
   transform-origin: 52px 185px;
   animation: armWork 2.2s ease-in-out infinite;
+}
+.robot-arm.punch .robot-svg{
+  animation: armPunch 360ms ease-out 1;
 }
 
 @keyframes grip{
@@ -376,23 +413,21 @@ header{
 }
 .overlay.active{opacity:1;pointer-events:auto}
 
-/* ✅ MENU NOW SLIDES FROM LEFT */
+/* MENU FROM LEFT */
 nav.mobile-menu{
   position:fixed;
-  left:0; top:0;               /* changed */
-  right:auto;                  /* changed */
+  left:0; top:0;
   height:100vh;
   width:min(86vw, 380px);
   background: var(--glass-white);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border-right: 1px solid var(--glass-border); /* changed side */
-  border-left: none;
-  transform:translateX(-100%); /* changed */
+  border-right: 1px solid var(--glass-border);
+  transform:translateX(-100%);
   transition: transform .25s ease;
   z-index:1050;
   padding: calc(var(--ticker-h) + var(--header-h) + 18px) 18px 22px;
-  box-shadow: 12px 0 30px rgba(0,0,0,.28);      /* changed direction */
+  box-shadow: 12px 0 30px rgba(0,0,0,.28);
 }
 nav.mobile-menu.active{transform:translateX(0)}
 
@@ -434,6 +469,7 @@ main{
   .burger,.overlay,nav.mobile-menu{display:none}
 }
 
+/* keep arm desktop-only by default */
 @media(max-width:520px){
   .robot-arm{ display:none; }
 }
@@ -454,7 +490,7 @@ main{
       <div class="boxes-flow clone" id="boxesFlowB"></div>
     </div>
 
-    <div class="robot-arm" aria-hidden="true">
+    <div class="robot-arm" id="robotArm" aria-hidden="true">
       <svg class="robot-svg" viewBox="0 0 190 240" fill="none">
         <path d="M58 205 L58 120" stroke="rgba(255,255,255,0.35)" stroke-width="12" stroke-linecap="round"/>
         <path d="M58 205 L58 120" stroke="rgba(0,0,0,0.35)" stroke-width="14" stroke-linecap="round" opacity=".55"/>
@@ -499,7 +535,7 @@ main{
 
     <div class="header-right">
       <button class="user-btn" aria-label="Log in" type="button">
-        <!-- ✅ NEW symmetric icon -->
+        <!-- symmetric icon -->
         <svg class="user-ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <g stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke">
             <circle cx="12" cy="8" r="3.5"></circle>
@@ -549,6 +585,7 @@ document.addEventListener('keydown', (e) => {
 (function(){
   const flowA = document.getElementById('boxesFlowA');
   const flowB = document.getElementById('boxesFlowB');
+  const arm = document.getElementById('robotArm');
 
   function rand(min,max){ return Math.random()*(max-min)+min; }
 
@@ -576,13 +613,19 @@ document.addEventListener('keydown', (e) => {
       const rot = rand(-2.4, 2.4);
 
       b.style.top = y + 'px';
-      b.style.transform = `translateX(-50%) rotate(${rot}deg) translateX(${side}px)`;
+
+      // store base transform components in vars so we can nudge safely
+      b.style.setProperty('--side', side + 'px');
+      b.style.setProperty('--rot', rot + 'deg');
 
       flowEl.appendChild(b);
     }
   }
 
-  function build(){ populate(flowA); populate(flowB); }
+  function build(){
+    populate(flowA);
+    populate(flowB);
+  }
   build();
 
   let t;
@@ -590,6 +633,53 @@ document.addEventListener('keydown', (e) => {
     clearTimeout(t);
     t = setTimeout(build, 250);
   });
+
+  /* ====== Robot interaction (illusion) ======
+     Pick a box that is currently near arm's Y-level (screen-based),
+     prefer right-side-ish boxes (we push left), then nudge it.
+  */
+  function nudgeOnce(){
+    // if arm hidden (mobile), skip
+    if (getComputedStyle(arm).display === 'none') return;
+
+    const boxes = document.querySelectorAll('.box');
+    if (!boxes.length) return;
+
+    const armRect = arm.getBoundingClientRect();
+    const targetY = armRect.top + armRect.height * 0.42;
+
+    // find closest box by Y to the arm (screen space)
+    let best = null;
+    let bestDist = Infinity;
+
+    boxes.forEach(b => {
+      const r = b.getBoundingClientRect();
+      const cy = r.top + r.height * 0.5;
+      const dist = Math.abs(cy - targetY);
+
+      // only consider boxes that are on belt area (not offscreen)
+      if (r.bottom < 0 || r.top > window.innerHeight) return;
+
+      if (dist < bestDist){
+        bestDist = dist;
+        best = b;
+      }
+    });
+
+    if (!best) return;
+
+    // arm punch animation
+    arm.classList.add('punch');
+    setTimeout(() => arm.classList.remove('punch'), 380);
+
+    // box nudge (quick shove)
+    best.classList.add('nudged');
+    setTimeout(() => best.classList.remove('nudged'), 260);
+  }
+
+  // run periodically (feels like working arm)
+  setInterval(nudgeOnce, 2200);
+
 })();
 </script>
 
