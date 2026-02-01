@@ -283,4 +283,88 @@ main{
 <header>
   <img src="logo.png" class="logo" alt="PrepNest NY">
   <button class="burger" aria-label="Menu" aria-expanded="false">
-    <span></span><span></span
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<div class="overlay" id="overlay"></div>
+
+<nav class="mobile-menu" id="menu">
+  <a href="#home">Home</a>
+  <a href="#services">Services</a>
+  <a href="#pricing">Pricing</a>
+  <a href="#contact">Contact</a>
+</nav>
+
+<main id="home">
+  <!-- Текст убрал как ты просил. Просто пустая страница для эффекта. -->
+</main>
+
+<script>
+const burger=document.querySelector('.burger');
+const menu=document.getElementById('menu');
+const overlay=document.getElementById('overlay');
+
+function toggleMenu(){
+  const open = burger.classList.toggle('active');
+  menu.classList.toggle('active', open);
+  overlay.classList.toggle('active', open);
+  document.body.classList.toggle('menu-open', open);
+  burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+
+burger.addEventListener('click', toggleMenu);
+overlay.addEventListener('click', () => {
+  if (burger.classList.contains('active')) toggleMenu();
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && burger.classList.contains('active')) toggleMenu();
+});
+
+/* boxes */
+(function(){
+  const bg=document.getElementById('boxesBg');
+  const isMobile = window.matchMedia('(max-width: 768px)').matches;
+  const count = isMobile ? 14 : 20;
+
+  function rand(min,max){ return Math.random()*(max-min)+min; }
+
+  function spawn(){
+    const b=document.createElement('div');
+    b.className='box';
+
+    const size = rand(60, 160);
+    b.style.width = size + 'px';
+    b.style.height = size + 'px';
+
+    const x0 = rand(-60, window.innerWidth + 60);
+    const x1 = x0 + rand(-160, 160);
+
+    b.style.setProperty('--x0', x0 + 'px');
+    b.style.setProperty('--x1', x1 + 'px');
+    b.style.setProperty('--r0', rand(-14, 14) + 'deg');
+    b.style.setProperty('--r1', rand(360, 900) + 'deg');
+
+    b.style.animation = `drop ${rand(10,18)}s linear ${rand(0,6)}s infinite`;
+
+    bg.appendChild(b);
+  }
+
+  function rebuild(){
+    bg.innerHTML='';
+    for(let i=0;i<count;i++) spawn();
+  }
+
+  rebuild();
+
+  let t;
+  window.addEventListener('resize', () => {
+    clearTimeout(t);
+    t=setTimeout(rebuild, 250);
+  });
+})();
+</script>
+
+</body>
+</html>
