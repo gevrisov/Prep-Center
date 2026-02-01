@@ -36,45 +36,54 @@
       display: block;
     }
 
-    /* BURGER */
-    .burger {
-      width: 32px;
-      height: 24px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 8px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0;
-    }
-
-    .burger span {
-      height: 1px; /* thinner lines */
-      width: 100%;
-      background: #000;
-      border-radius: 1px;
-      transition: transform 0.25s ease, opacity 0.2s ease;
-      transform-origin: center;
-    }
-
-    .burger.active span:nth-child(1) {
-      transform: translateY(8px) rotate(45deg);
-    }
-
-    .burger.active span:nth-child(2) {
-      opacity: 0;
-    }
-
-    .burger.active span:nth-child(3) {
-      transform: translateY(-8px) rotate(-45deg);
-    .burger {
+   /* BURGER BUTTON */
+.burger {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
   -webkit-tap-highlight-color: transparent;
 }
 
-.burger:focus-visible {
-  outline: none;
+/* LINES */
+.burger span {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #000;
+  border-radius: 2px;
+  transition: transform 0.25s ease, opacity 0.2s ease;
+  transform-origin: center;
+}
+
+/* INITIAL POSITIONS */
+.burger span:nth-child(1) {
+  top: 7px;
+}
+
+.burger span:nth-child(2) {
+  top: 13px;
+}
+
+.burger span:nth-child(3) {
+  top: 19px;
+}
+
+/* ACTIVE → PERFECT X */
+.burger.active span:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.burger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.burger.active span:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
 }
 
     /* OVERLAY */
