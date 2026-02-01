@@ -14,6 +14,9 @@
 
   --bg-black:#000;
 
+  /* conveyor speed (ONE source of truth) */
+  --belt-speed: 8.5s;
+
   /* cardboard */
   --cardboard-1:#9a7646;
   --cardboard-2:#87643a;
@@ -70,7 +73,6 @@ body{
     inset 0 40px 80px rgba(255,255,255,0.04),
     0 0 0 1px rgba(0,0,0,0.6);
 
-  /* slightly soften edges into the matte background */
   border-left: 1px solid rgba(255,255,255,0.08);
   border-right: 1px solid rgba(255,255,255,0.08);
 }
@@ -102,9 +104,11 @@ body{
       rgba(0,0,0,0.00) 26px
     );
   opacity: .45;
-  transform: translateY(0);
-  animation: beltMove 1.25s linear infinite;
+
+  /* SAME SPEED AS BOXES */
+  animation: beltMove var(--belt-speed) linear infinite;
 }
+
 @keyframes beltMove{
   from{ transform: translateY(0); }
   to{ transform: translateY(26px); }
@@ -182,6 +186,8 @@ body{
     inset 0 1px 0 rgba(255,255,255,.08),
     inset 0 -2px 0 rgba(0,0,0,.18),
     0 14px 26px rgba(0,0,0,0.55);
+
+  will-change: transform;
 }
 
 /* subtle top-view lighting */
@@ -212,10 +218,10 @@ body{
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cg fill='none' stroke='%2323180F' stroke-opacity='0.7' stroke-width='4'%3E%3Cpath d='M20 40V18M20 18l-6 6M20 18l6 6M44 40V18M44 18l-6 6M44 18l6 6'/%3E%3C/g%3E%3Crect x='10' y='10' width='44' height='44' fill='none' stroke='%2323180F' stroke-opacity='0.35' stroke-width='3'/%3E%3C/svg%3E");
 }
 
-/* each box moves down the conveyor */
+/* each box moves down the conveyor (duration is set inline from JS using --belt-speed) */
 @keyframes boxMove{
-  from { transform: translateX(-50%) translateY(-160px); }
-  to   { transform: translateX(-50%) translateY(calc(100vh + 200px)); }
+  from { transform: translateX(-50%) translateY(-160px) rotate(var(--rot)) translateX(var(--side)); }
+  to   { transform: translateX(-50%) translateY(calc(100vh + 200px)) rotate(var(--rot)) translateX(var(--side)); }
 }
 
 /* ================= PAGE GLASS (DO NOT TOUCH) ================= */
@@ -247,7 +253,6 @@ body{
   overflow:hidden;
   font-size:14px;
 }
-
 .ticker__content{
   white-space:nowrap;
   padding-left:100%;
@@ -397,7 +402,6 @@ main{
   .burger,.overlay,nav.mobile-menu{display:none}
 }
 
-/* small screens: narrower conveyor */
 @media(max-width:420px){
   .conveyor{ width: 92vw; }
 }
@@ -425,7 +429,7 @@ main{
   </div>
 </div>
 
-<!-- Header (glass) -->
+<!-- Header -->
 <header>
   <img src="logo.png" class="logo" alt="PrepNest NY">
   <button class="burger" aria-label="Menu" aria-expanded="false">
@@ -470,57 +474,47 @@ document.addEventListener('keydown', (e) => {
 /* conveyor boxes (top view moving down) */
 (function(){
   const track = document.getElementById('boxesTrack');
-  const isMobile = window.matchMedia('(max-width: 768px)').matches;
-
-  const BOX_COUNT = isMobile ? 8 : 10;     // how many boxes on belt
-  const SPEED_SEC = isMobile ? 7.5 : 8.5;  // belt speed
 
   function rand(min,max){ return Math.random()*(max-min)+min; }
 
-  function createBox(i){
-    const b = document.createElement('div');
-    b.className = 'box';
-
-    // sizes that fit inside belt
-    const w = rand(140, 220);
-    const h = rand(110, 180);
-    b.style.width = w + 'px';
-    b.style.height = h + 'px';
-
-    // tiny rotation for realism (top view)
-    const rot = rand(-2.4, 2.4);
-    // add sideways offset within belt lane
-    const side = rand(-22, 22);
-
-    // staggered starting positions
-    const startDelay = -(SPEED_SEC / BOX_COUNT) * i;
-
-    b.style.animation = `boxMove ${SPEED_SEC}s linear ${startDelay}s infinite`;
-    b.style.transform = `translateX(-50%) translateY(-160px) rotate(${rot}deg) translateX(${side}px)`;
-
-    // IMPORTANT: keep the animation transform correct with CSS variable approach
-    // We'll store rotate/side in CSS vars and let keyframes move translateY.
-    b.style.setProperty('--rot', rot + 'deg');
-    b.style.setProperty('--side', side + 'px');
-
-    return b;
+  function getBeltSpeed(){
+    return getComputedStyle(document.documentElement)
+      .getPropertyValue('--belt-speed')
+      .trim() || '8.5s';
   }
 
-  // Override keyframes transform to include rotate/side always:
-  // (We do it via a dynamic style tag for simplicity.)
-  const styleTag = document.createElement('style');
-  styleTag.textContent = `
-    @keyframes boxMove{
-      from { transform: translateX(-50%) translateY(-160px) rotate(var(--rot)) translateX(var(--side)); }
-      to   { transform: translateX(-50%) translateY(calc(100vh + 200px)) rotate(var(--rot)) translateX(var(--side)); }
-    }
-  `;
-  document.head.appendChild(styleTag);
-
   function build(){
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const BOX_COUNT = isMobile ? 8 : 10;
+    const BELT_SPEED = getBeltSpeed();
+
     track.innerHTML = '';
+
     for(let i=0;i<BOX_COUNT;i++){
-      track.appendChild(createBox(i));
+      const b = document.createElement('div');
+      b.className = 'box';
+
+      // sizes that fit inside belt
+      const w = rand(140, 220);
+      const h = rand(110, 180);
+      b.style.width = w + 'px';
+      b.style.height = h + 'px';
+
+      // tiny rotation + lane offset (top view realism)
+      const rot = rand(-2.4, 2.4);
+      const side = rand(-22, 22);
+
+      // spread boxes evenly along the loop
+      // use negative delays to place them already "on the belt"
+      const delaySec = -(parseFloat(BELT_SPEED) / BOX_COUNT) * i;
+
+      b.style.setProperty('--rot', rot + 'deg');
+      b.style.setProperty('--side', side + 'px');
+
+      /* SAME SPEED AS BELT (var --belt-speed) */
+      b.style.animation = `boxMove ${BELT_SPEED} linear ${delaySec}s infinite`;
+
+      track.appendChild(b);
     }
   }
 
@@ -529,7 +523,7 @@ document.addEventListener('keydown', (e) => {
   let t;
   window.addEventListener('resize', () => {
     clearTimeout(t);
-    t = setTimeout(() => build(), 250);
+    t = setTimeout(build, 250);
   });
 })();
 </script>
