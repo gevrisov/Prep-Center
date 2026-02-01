@@ -13,35 +13,45 @@
   --header-h:64px;
 
   --bg-black:#000;
-  --glass: rgba(10,10,10,0.58);      /* тот самый красивый полупрозрачный */
-  --glass-border: rgba(255,255,255,0.06);
   --text:#fff;
+  --muted:#b5b5b5;
+
+  /* cardboard */
+  --cardboard-1:#9a7646;
+  --cardboard-2:#87643a;
+  --cardboard-3:#b98956;
+
+  /* page glass (match the old “section” vibe) */
+  --page-glass: rgba(10,10,10,0.55); /* как раньше нравилось */
+  --page-glass-border: rgba(255,255,255,0.06);
 }
 
 /* ================= BODY ================= */
 body{
-  font-family:Arial, sans-serif;
-  background:var(--bg-black);
-  color:var(--text);
-  padding-top:calc(var(--ticker-h) + var(--header-h));
-  min-height:100vh;
+  font-family: Arial, sans-serif;
+  background: var(--bg-black);
+  color: var(--text);
+  padding-top: calc(var(--ticker-h) + var(--header-h));
+  min-height: 100vh;
 }
 
 /* ================= BACKGROUND BOXES ================= */
 .boxes-bg{
-  position:fixed;
-  inset:0;
-  z-index:1;
-  pointer-events:none;
-  overflow:hidden;
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
 }
 
 .box{
   position:absolute;
   border-radius:0;
   border:1px solid rgba(0,0,0,.28);
+
+  /* cardboard + ровная лента + зазор (тёмная линия по центру) */
   background-image:
-    /* tape (wide) */
+    /* tape area */
     linear-gradient(to bottom,
       transparent 0%,
       transparent 44%,
@@ -50,7 +60,7 @@ body{
       transparent 58%,
       transparent 100%
     ),
-    /* tape seam (center line) */
+    /* tape seam - thin line INSIDE the tape */
     linear-gradient(to bottom,
       transparent 0%,
       transparent 50.7%,
@@ -59,22 +69,29 @@ body{
       transparent 52%,
       transparent 100%
     ),
-    /* very soft fibers */
+    /* very soft fibers (weaker texture) */
     repeating-linear-gradient(
       45deg,
       rgba(255,255,255,.01) 0px,
-      rgba(0,0,0,.01) 6px
+      rgba(0,0,0,.01) 7px
     ),
-    /* cardboard base */
-    linear-gradient(135deg,#b98956 0%,#9a7646 38%,#87643a 100%);
+    /* base cardboard */
+    linear-gradient(135deg,
+      var(--cardboard-3) 0%,
+      var(--cardboard-1) 38%,
+      var(--cardboard-2) 100%
+    );
+
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.08),
     inset 0 -2px 0 rgba(0,0,0,.18),
     0 20px 60px rgba(0,0,0,.75);
+
   opacity:.92;
-  will-change:transform;
+  will-change: transform;
 }
 
+/* cube-ish shading */
 .box::before{
   content:"";
   position:absolute;
@@ -87,6 +104,7 @@ body{
     linear-gradient(to top,rgba(0,0,0,.16),transparent 28%);
 }
 
+/* icon only; scales with box; no text */
 .box::after{
   content:"";
   position:absolute;
@@ -106,30 +124,37 @@ body{
   to{transform:translate3d(var(--x1),calc(100vh + 180px),0) rotate(var(--r1))}
 }
 
-/* ================= PAGE GLASS (THE EFFECT YOU LIKED) ================= */
-/* Этот слой покрывает всю страницу, и коробки "проходят" под ним */
+/* ================= PAGE “GLASS” (NOT UNDER HEADER) ================= */
+/* Важно: начинаем СТРОГО под ticker+header, чтобы шапка не теряла свой стеклянный вид */
 .page-glass{
-  position:fixed;
-  inset:0;
-  z-index:4;                 /* above boxes, below content/header/menu */
-  pointer-events:none;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: calc(var(--ticker-h) + var(--header-h));
+  bottom: 0;
 
-  background: var(--glass);
-  border-top: 1px solid rgba(255,255,255,0.02);
+  z-index: 4;           /* above boxes, below content */
+  pointer-events: none;
 
-  /* лёгкий blur, но не сильный */
-  backdrop-filter: blur(2.5px);
-  -webkit-backdrop-filter: blur(2.5px);
+  /* тот “классный” прозрачный цвет как у твоего блока раньше */
+  background: var(--page-glass);
+
+  /* делаем эффект живее и НЕ тусклым: почти без blur */
+  backdrop-filter: blur(0.6px);
+  -webkit-backdrop-filter: blur(0.6px);
+
+  /* лёгкая граница сверху как у секции */
+  border-top: 1px solid rgba(255,255,255,0.03);
 }
 
 /* ================= TICKER ================= */
 .ticker{
-  position:fixed;
-  top:0;left:0;
+  position: fixed;
+  top:0; left:0;
   width:100%;
   height:var(--ticker-h);
   background:#000;
-  z-index:1200;
+  z-index: 1200;
   display:flex;
   align-items:center;
   overflow:hidden;
@@ -148,21 +173,22 @@ body{
 
 /* ================= GLASS HEADER ================= */
 header{
-  position:fixed;
-  top:var(--ticker-h);
-  left:0;
-  width:100%;
-  height:var(--header-h);
+  position: fixed;
+  top: var(--ticker-h);
+  left: 0;
+  width: 100%;
+  height: var(--header-h);
   display:flex;
   align-items:center;
   justify-content:space-between;
   padding:0 16px;
-  z-index:1100;
+  z-index: 1100;
 
-  background:rgba(255,255,255,.12);
-  backdrop-filter:blur(10px);
-  -webkit-backdrop-filter:blur(10px);
-  border-bottom:1px solid rgba(255,255,255,.25);
+  /* стеклянная шапка — как тебе нравится */
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,0.25);
 }
 
 .logo{width:180px;height:auto;display:block}
@@ -193,7 +219,7 @@ header{
 
 /* ================= MENU ================= */
 .overlay{
-  position:fixed;inset:0;
+  position:fixed; inset:0;
   background:rgba(0,0,0,.45);
   opacity:0;
   pointer-events:none;
@@ -204,7 +230,7 @@ header{
 
 nav.mobile-menu{
   position:fixed;
-  right:0;top:0;
+  right:0; top:0;
   height:100vh;
   width:min(82vw,360px);
   background:#fff;
@@ -226,17 +252,15 @@ nav.mobile-menu a{
 body.menu-open{overflow:hidden}
 
 /* ================= CONTENT ================= */
+/* контент выше page-glass */
 main{
-  position:relative;
-  z-index:5;       /* above page-glass */
-  padding:24px;
-  max-width:1200px;
-  margin:auto;
-  min-height:120vh; /* чтобы было куда скроллить */
+  position: relative;
+  z-index: 5;
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 140vh; /* чтобы был скролл и ты видел эффект */
 }
-
-/* убрать демо-блок вообще — оставим пусто, как ты просил */
-.hidden-demo{display:none}
 
 /* desktop */
 @media(min-width:769px){
@@ -259,87 +283,4 @@ main{
 <header>
   <img src="logo.png" class="logo" alt="PrepNest NY">
   <button class="burger" aria-label="Menu" aria-expanded="false">
-    <span></span><span></span><span></span>
-  </button>
-</header>
-
-<div class="overlay" id="overlay"></div>
-
-<nav class="mobile-menu" id="menu">
-  <a href="#home">Home</a>
-  <a href="#services">Services</a>
-  <a href="#pricing">Pricing</a>
-  <a href="#contact">Contact</a>
-</nav>
-
-<main id="home">
-  <!-- можешь потом добавлять секции сюда -->
-  <div style="height: 120vh;"></div>
-</main>
-
-<script>
-const burger=document.querySelector('.burger');
-const menu=document.getElementById('menu');
-const overlay=document.getElementById('overlay');
-
-function toggleMenu(){
-  const open = burger.classList.toggle('active');
-  menu.classList.toggle('active', open);
-  overlay.classList.toggle('active', open);
-  document.body.classList.toggle('menu-open', open);
-  burger.setAttribute('aria-expanded', open ? 'true' : 'false');
-}
-
-burger.addEventListener('click', toggleMenu);
-overlay.addEventListener('click', () => {
-  if (burger.classList.contains('active')) toggleMenu();
-});
-
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && burger.classList.contains('active')) toggleMenu();
-});
-
-/* boxes */
-(function(){
-  const bg=document.getElementById('boxesBg');
-  const count = window.matchMedia('(max-width: 768px)').matches ? 14 : 20;
-
-  function rand(min,max){ return Math.random()*(max-min)+min; }
-
-  function spawn(){
-    const b=document.createElement('div');
-    b.className='box';
-
-    const size = rand(60, 160);
-    b.style.width = size + 'px';
-    b.style.height = size + 'px';
-
-    const x0 = rand(-60, window.innerWidth + 60);
-    const x1 = x0 + rand(-160, 160);
-
-    b.style.setProperty('--x0', x0 + 'px');
-    b.style.setProperty('--x1', x1 + 'px');
-    b.style.setProperty('--r0', rand(-14, 14) + 'deg');
-    b.style.setProperty('--r1', rand(360, 900) + 'deg');
-
-    b.style.animation = `drop ${rand(10,18)}s linear ${rand(0,6)}s infinite`;
-
-    bg.appendChild(b);
-  }
-
-  bg.innerHTML='';
-  for(let i=0;i<count;i++) spawn();
-
-  let t;
-  window.addEventListener('resize', () => {
-    clearTimeout(t);
-    t=setTimeout(() => {
-      bg.innerHTML='';
-      for(let i=0;i<count;i++) spawn();
-    }, 250);
-  });
-})();
-</script>
-
-</body>
-</html>
+    <span></span><span></span
