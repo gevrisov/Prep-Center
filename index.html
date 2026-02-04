@@ -3,142 +3,103 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>PrepNest NY — Amazon FBA Prep & Temporary Storage in Brooklyn</title>
-  <meta name="description" content="Professional prep, labeling, inspection, and short-term storage services for Amazon sellers shipping to FBA." />
-  <link rel="icon" href="/assets/img/favicon.png" />
-  <link rel="stylesheet" href="/assets/css/base.css" />
-  <link rel="stylesheet" href="/assets/css/components.css" />
-  <link rel="stylesheet" href="/assets/css/pages.css" />
+  <title>PrepNest NY — Prep Center</title>
+
+  <!-- Use your existing favicon -->
+  <link rel="icon" type="image/png" href="/assets/img/favicon.png?v=2">
+
+  <!-- Existing CSS (kept) -->
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <link rel="stylesheet" href="/assets/css/pages.css">
+
+  <!-- NEW: Home (Google-like) styles -->
+  <link rel="stylesheet" href="/assets/css/home.css">
 </head>
+
 <body>
 
-<header class="header">
-  <div class="container">
-    <div class="navbar">
-      <a class="brand" href="/">
-        <div class="logo" aria-hidden="true">
-          <span style="font-weight:800; font-size:12px; color:var(--text)">PN</span>
-        </div>
-        <div class="title">
-          <b>PrepNest NY</b>
-          <span>Amazon FBA Prep & Temporary Storage</span>
-        </div>
-      </a>
+  <!-- Header (logo left, "prep center" after logo, right: Get Started + burger) -->
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Home">
+      <img class="brand__logo" src="/assets/img/favicon.png" alt="PrepNest NY logo">
+      <span class="brand__text">prep center</span>
+    </a>
 
-      <nav class="navlinks" aria-label="Primary">
-        <a data-nav href="/">Home</a>
-        <a data-nav href="/services/">Services</a>
-        <a data-nav href="/how-it-works/">How It Works</a>
-        <a data-nav href="/pricing/">Pricing</a>
-        <a data-nav href="/get-started/">Get Started</a>
-      </nav>
+    <div class="topbar__right">
+      <a class="btn btn-primary" href="/get-started/">Get Started</a>
 
-      <div class="navactions">
-        <button class="btn ghost" data-back type="button" title="Back">
-          <span class="icon" aria-hidden="true">←</span> Back
+      <button class="icon-btn" type="button" data-menu-btn aria-label="Open menu" aria-expanded="false">
+        <span class="icon-burger" aria-hidden="true"></span>
+      </button>
+
+      <!-- Dropdown panel -->
+      <div class="menu" data-menu role="menu" aria-label="Quick menu">
+        <div class="menu__header">Quick menu</div>
+
+        <button class="menu__item" type="button" data-open-modal="prep">
+          <span class="menu__title">Prep Services</span>
+          <span class="menu__desc">Labeling, polybagging, bundling</span>
         </button>
-        <a class="btn primary" href="/get-started/">Get Started</a>
-      </div>
-    </div>
-  </div>
-</header>
 
-<main>
-  <section class="hero">
-    <div class="container">
-      <div class="heroGrid">
-        <div class="panel">
-          <h1 class="h1">Amazon FBA Prep & Temporary Storage in Brooklyn</h1>
-          <p class="lead">Professional prep, labeling, inspection, and short-term storage services for Amazon sellers shipping to FBA.</p>
+        <button class="menu__item" type="button" data-open-modal="receiving">
+          <span class="menu__title">Receiving & Inspection</span>
+          <span class="menu__desc">Count, visual check, reporting</span>
+        </button>
 
-          <div class="ctaRow">
-            <a class="btn primary" href="/get-started/">Get Started</a>
-            <a class="btn" href="/services/">View Services</a>
-          </div>
+        <button class="menu__item" type="button" data-open-modal="storage">
+          <span class="menu__title">Temporary Storage</span>
+          <span class="menu__desc">Short-term, billed per box</span>
+        </button>
 
-          <div class="miniCTA">Request a quote • Fast response</div>
+        <button class="menu__item" type="button" data-open-modal="pricing">
+          <span class="menu__title">Pricing Overview</span>
+          <span class="menu__desc">High-level pricing & billing logic</span>
+        </button>
 
-          <hr class="sep" />
+        <div class="menu__divider"></div>
 
-          <div class="callout">
-            <strong>Scope:</strong> We work exclusively with Amazon sellers and handle prep according to Amazon FBA requirements.
-            Our services are designed for efficient processing and temporary storage — not long-term warehousing.
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="badge">Ops-first • Compliance-first • No long-term warehousing</div>
-          <hr class="sep" />
-          <div class="small">
-            Key rule:
-            <b style="color:var(--text)">Outbound shipments are released only after payment is received.</b>
-          </div>
-          <hr class="sep" />
-          <a class="card" href="/how-it-works/">
-            <h3>See the process</h3>
-            <p>6-step workflow from request → receiving → prep → invoice → payment → FBA shipment.</p>
-          </a>
+        <!-- Dropdown footer -->
+        <div class="menu__footer">
+          <a class="menu__footlink" href="/legal/privacy-policy.html">Privacy Policy</a>
+          <span class="menu__dot">•</span>
+          <a class="menu__footlink" href="/legal/terms-of-service.html">Terms of Service</a>
         </div>
       </div>
     </div>
+  </header>
+
+  <!-- Home body: ONLY "How it works" + Get Started -->
+  <main class="page">
+    <section class="hero">
+      <h1 class="hero__title">How it works</h1>
+
+      <a class="btn btn-giant" href="/get-started/">
+        Get Started <span class="btn-giant__icon" aria-hidden="true">↗</span>
+      </a>
+    </section>
+  </main>
+
+  <!-- Footer (small light-gray text) -->
+  <footer class="site-footer">
+    2026 <span class="dot">•</span> PrepNest NY LLC <span class="dot">•</span> All rights reserved
+  </footer>
+
+  <!-- Modal -->
+  <div class="modal-overlay" data-modal-overlay hidden></div>
+
+  <section class="modal" data-modal hidden role="dialog" aria-modal="true" aria-label="Details">
+    <div class="modal__top">
+      <div class="modal__title" data-modal-title>Title</div>
+      <button class="icon-btn" type="button" data-modal-close aria-label="Close">✕</button>
+    </div>
+    <div class="modal__body" data-modal-body></div>
   </section>
 
-  <section class="page">
-    <div class="container">
-      <h2 style="margin:0 0 10px; font-size:20px">Services Overview</h2>
-      <p class="subtitle">Click a service to open the full page.</p>
+  <!-- Existing JS (kept) -->
+  <script src="/assets/js/main.js"></script>
 
-      <div class="grid">
-        <a class="card" href="/services/prep-services.html">
-          <h3>Prep Services</h3>
-          <p>FNSKU labeling, polybagging, bubble wrap, bundling, carton prep, expiration labels.</p>
-        </a>
-
-        <a class="card" href="/services/receiving-inspection.html">
-          <h3>Receiving & Inspection</h3>
-          <p>Inbound receiving, counts, quantity verification, visual inspection, issue reporting.</p>
-        </a>
-
-        <a class="card" href="/services/temporary-storage.html">
-          <h3>Temporary Storage</h3>
-          <p>Short-term storage billed per box, weekly/monthly billing, standard size/weight limits.</p>
-        </a>
-      </div>
-
-      <hr class="sep" />
-
-      <div class="grid" style="grid-template-columns: repeat(2, 1fr);">
-        <a class="card" href="/pricing/">
-          <h3>Pricing Overview</h3>
-          <p>Pricing logic (no public numbers): per-unit prep, per-box receiving, per-box storage.</p>
-        </a>
-        <a class="card" href="/legal/terms-of-service.html">
-          <h3>Legal Basics</h3>
-          <p>Terms, storage policy with box specs, liability disclaimer.</p>
-        </a>
-      </div>
-    </div>
-  </section>
-</main>
-
-<footer class="footer">
-  <div class="container">
-    <div class="footerGrid">
-      <div>
-        <b>PrepNest NY LLC</b><br/>
-        Brooklyn, NY<br/>
-        Amazon FBA Prep & Temporary Storage
-      </div>
-      <div>
-        <b>Legal</b><br/>
-        <a href="/legal/terms-of-service.html">Terms of Service</a><br/>
-        <a href="/legal/storage-policy.html">Storage Policy</a><br/>
-        <a href="/legal/liability-disclaimer.html">Liability Disclaimer</a>
-      </div>
-    </div>
-  </div>
-</footer>
-
-<script src="/assets/js/main.js"></script>
+  <!-- NEW JS: menu + modal -->
+  <script src="/assets/js/home.js"></script>
 </body>
 </html>
