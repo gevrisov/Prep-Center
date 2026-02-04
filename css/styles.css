@@ -201,14 +201,13 @@ body{
   border-radius: var(--radius);
   padding: 14px 16px;
   position: relative;
-  padding-left: 52px;
+  padding-left: 30px;
 }
 .steps li::before{
   counter-increment: step;
   content: counter(step) ".";
   position: absolute;
   left: 16px;
-  right: 4px;
   top: 14px;
   font-weight: 700;
   color: var(--muted);
