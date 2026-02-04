@@ -1,20 +1,4 @@
-// --- Open intake on "Get Started" ---
-const intakeSection = document.getElementById("intake");
-
-function openIntake(){
-  if (!intakeSection) return;
-  intakeSection.classList.remove("hidden");
-  intakeSection.scrollIntoView({ behavior: "smooth", block: "start" });
-}
-
-document.querySelectorAll('[data-action="open-intake"]').forEach((btn) => {
-  btn.addEventListener("click", (e) => {
-    e.preventDefault();
-    openIntake();
-  });
-});
-
-// --- Active section highlighting (header links + pills) ---
+// --- Active section highlighting (top nav only) ---
 const navLinks = Array.from(document.querySelectorAll("[data-section]"));
 const observedSections = Array.from(document.querySelectorAll("[data-observe]"));
 
@@ -25,19 +9,21 @@ function setActive(sectionId){
   });
 }
 
-const io = new IntersectionObserver((entries) => {
-  const visible = entries
-    .filter(e => e.isIntersecting)
-    .sort((a,b) => b.intersectionRatio - a.intersectionRatio)[0];
+if (observedSections.length && navLinks.length){
+  const io = new IntersectionObserver((entries) => {
+    const visible = entries
+      .filter(e => e.isIntersecting)
+      .sort((a,b) => b.intersectionRatio - a.intersectionRatio)[0];
 
-  if (visible){
-    setActive(visible.target.getAttribute("data-observe"));
-  }
-}, { root: null, threshold: [0.2, 0.35, 0.5, 0.65] });
+    if (visible){
+      setActive(visible.target.getAttribute("data-observe"));
+    }
+  }, { root: null, threshold: [0.2, 0.35, 0.5, 0.65] });
 
-observedSections.forEach(sec => io.observe(sec));
+  observedSections.forEach(sec => io.observe(sec));
+}
 
-// --- Intake form behavior ---
+// --- Intake form behavior (works on intake.html) ---
 const svcStorage = document.getElementById("svcStorage");
 const storageExtra = document.getElementById("storageExtra");
 const standardBoxes = document.getElementById("standardBoxes");
@@ -45,7 +31,9 @@ const intakeForm = document.getElementById("intakeForm");
 const formStatus = document.getElementById("formStatus");
 
 function updateStorageVisibility(){
-  const on = !!svcStorage?.checked;
+  if (!svcStorage || !storageExtra || !standardBoxes) return;
+
+  const on = !!svcStorage.checked;
   storageExtra.hidden = !on;
 
   if (on) {
@@ -58,22 +46,23 @@ function updateStorageVisibility(){
 svcStorage?.addEventListener("change", updateStorageVisibility);
 updateStorageVisibility();
 
-// Front-end-only submit (no backend on GitHub Pages)
 intakeForm?.addEventListener("submit", (e) => {
   e.preventDefault();
 
   if (!intakeForm.checkValidity()){
-    formStatus.textContent = "Please complete all required fields and confirmations.";
+    if (formStatus) formStatus.textContent = "Please complete all required fields and confirmations.";
     intakeForm.reportValidity();
     return;
   }
 
   const data = new FormData(intakeForm);
   const payload = Object.fromEntries(data.entries());
-
   console.log("Intake payload:", payload);
 
-  formStatus.textContent = "Request submitted (demo). To receive submissions by email, connect a backend (e.g., Formspree/Netlify/Cloudflare) later.";
+  if (formStatus){
+    formStatus.textContent =
+      "Request submitted (demo). To receive submissions by email, connect a backend (e.g., Formspree/Netlify/Cloudflare) later.";
+  }
   intakeForm.reset();
   updateStorageVisibility();
 });
@@ -205,7 +194,7 @@ const policies = {
 
 function openModal(key){
   const p = policies[key];
-  if (!p) return;
+  if (!p || !modal || !modalTitle || !modalBody) return;
   modalTitle.textContent = p.title;
   modalBody.innerHTML = p.body;
   modal.classList.add("open");
@@ -214,6 +203,7 @@ function openModal(key){
 }
 
 function closeModal(){
+  if (!modal) return;
   modal.classList.remove("open");
   modal.setAttribute("aria-hidden", "true");
   document.body.style.overflow = "";
@@ -226,5 +216,5 @@ document.querySelectorAll("[data-modal]").forEach(btn => {
 modalBackdrop?.addEventListener("click", closeModal);
 modalClose?.addEventListener("click", closeModal);
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && modal.classList.contains("open")) closeModal();
+  if (e.key === "Escape" && modal?.classList.contains("open")) closeModal();
 });
