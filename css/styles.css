@@ -386,18 +386,21 @@ input:focus,select:focus,textarea:focus{
 
   /* Footer: links in one row, meta on second line */
   .footer-inner{
-    flex-direction: column;
+    display: flex;
+    flex-direction: row;
     gap: 8px;
+    align-items:center;
   }
   .footer-links{
     flex-wrap: nowrap;
     white-space: nowrap;
     overflow-x: auto;
     gap: 10px;
-    font-size: 12px;
+    font-size: 10px;
   }
   .sep{ display:none; }
   .footer-meta{
-    font-size: 12px;
+    font-size: 10px;
+    align-items:center;
   }
 }
