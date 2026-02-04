@@ -4,102 +4,234 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Get Started — Intake Form | PrepNest NY LLC</title>
-  <link rel="icon" type="image/png" href="favicon.png" />
+  <meta name="description" content="Submit an intake request for Amazon FBA prep services." />
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 
 <body>
-<header class="site-header">
-  <div class="header-inner">
-    <a class="brand" href="index.html">
-      <img src="assets/favicon.png" class="brand-logo" alt="PrepNest NY LLC">
-      <span class="brand-text">PREP CENTER</span>
-    </a>
+  <header class="site-header" id="top">
+    <div class="header-inner">
+      <a class="brand" href="index.html" aria-label="PrepNest NY home">
+        <img src="assets/favicon.png" alt="PrepNest NY LLC" class="brand-logo" />
+        <span class="brand-text">PREP CENTER</span>
+      </a>
 
-    <nav class="nav-desktop">
-      <a class="nav-link" href="index.html#how-it-works">How It Works</a>
-      <a class="nav-link" href="index.html#services">Services</a>
-      <a class="nav-link" href="index.html#pricing">Pricing</a>
-    </nav>
+      <nav class="nav-desktop" aria-label="Primary">
+        <a class="nav-link" href="index.html#how-it-works">How It Works</a>
+        <a class="nav-link" href="index.html#services">Services</a>
+        <a class="nav-link" href="index.html#pricing">Pricing</a>
+        
+      </nav>
 
-    <div class="header-actions">
-      <a class="btn btn-primary" href="intake.html">Get Started</a>
+    </div>
+  </header>
+
+  <main class="site-main">
+    <section class="section" id="intake">
+      <div class="container">
+        <h2>Get Started — Intake Form</h2>
+        <p class="lead">Submission of this form does not guarantee acceptance. All requests are reviewed prior to confirmation.</p>
+
+        <form class="form" id="intakeForm" novalidate>
+          <div class="form-grid">
+            <fieldset class="fieldset">
+              <legend>Section 1 — Client Information</legend>
+
+              <label>
+                Full Name <span class="req">*</span>
+                <input name="fullName" type="text" required autocomplete="name" />
+              </label>
+
+              <label>
+                Company Name (optional)
+                <input name="companyName" type="text" autocomplete="organization" />
+              </label>
+
+              <label>
+                Email <span class="req">*</span>
+                <input name="email" type="email" required autocomplete="email" />
+              </label>
+
+              <label>
+                Phone (optional)
+                <input name="phone" type="tel" autocomplete="tel" />
+              </label>
+            </fieldset>
+
+            <fieldset class="fieldset">
+              <legend>Section 2 — Amazon Business Info</legend>
+
+              <label>
+                Amazon Marketplace <span class="req">*</span>
+                <select name="marketplace" required>
+                  <option value="" selected disabled>Choose…</option>
+                  <option>US</option>
+                  <option>CA</option>
+                  <option>EU</option>
+                  <option>Other</option>
+                </select>
+              </label>
+
+              <label>
+                Seller Type <span class="req">*</span>
+                <select name="sellerType" required>
+                  <option value="" selected disabled>Choose…</option>
+                  <option>Private Label</option>
+                  <option>Wholesale</option>
+                  <option>Arbitrage</option>
+                </select>
+              </label>
+            </fieldset>
+
+            <fieldset class="fieldset">
+              <legend>Section 3 — Shipment Details</legend>
+
+              <label>
+                Estimated number of boxes <span class="req">*</span>
+                <input name="boxes" type="number" min="1" required />
+              </label>
+
+              <label>
+                Estimated total units <span class="req">*</span>
+                <input name="units" type="number" min="1" required />
+              </label>
+
+              <p class="muted small">Units apply to prep work, not storage billing.</p>
+            </fieldset>
+
+            <fieldset class="fieldset">
+              <legend>Section 4 — Services Required</legend>
+
+              <label class="check">
+                <input type="checkbox" name="svcPrep" />
+                <span>Prep services (labeling, polybagging, etc.)</span>
+              </label>
+
+              <label class="check">
+                <input type="checkbox" name="svcReceiving" />
+                <span>Receiving &amp; inspection</span>
+              </label>
+
+              <label class="check">
+                <input type="checkbox" name="svcStorage" id="svcStorage" />
+                <span>Temporary storage (per box)</span>
+              </label>
+
+              <div class="storage-extra" id="storageExtra" hidden>
+                <div class="callout subtle">
+                  Storage is short-term and billed per box. Standard box size and weight limits apply.
+                </div>
+
+                <label>
+                  Are all boxes standard size (up to 24" x 18" x 18" and 50 lbs)? <span class="req">*</span>
+                  <select name="standardBoxes" id="standardBoxes">
+                    <option value="" selected disabled>Choose…</option>
+                    <option>Yes</option>
+                    <option>No</option>
+                  </select>
+                </label>
+
+                <label>
+                  Estimated arrival date (optional)
+                  <input name="arrivalDate" type="date" />
+                </label>
+              </div>
+            </fieldset>
+
+            <fieldset class="fieldset">
+              <legend>Section 5 — File Uploads</legend>
+
+              <label>
+                Upload FNSKU labels (PDF)
+                <input name="fnskuPdf" type="file" accept="application/pdf" />
+              </label>
+
+              <label>
+                Upload packing list (optional)
+                <input name="packingList" type="file" />
+              </label>
+
+              <p class="muted small">GitHub Pages is static — uploads are not processed automatically without a backend. Use this as an intake placeholder.</p>
+            </fieldset>
+
+            <fieldset class="fieldset">
+              <legend>Section 6 — Important Confirmations</legend>
+
+              <label class="check">
+                <input type="checkbox" name="c1" required />
+                <span>I confirm that all inventory is non-hazardous</span>
+              </label>
+
+              <label class="check">
+                <input type="checkbox" name="c2" required />
+                <span>I confirm all boxes meet the standard size and weight requirements</span>
+              </label>
+
+              <label class="check">
+                <input type="checkbox" name="c3" required />
+                <span>I understand storage is short-term and billed per box</span>
+              </label>
+
+              <label class="check">
+                <input type="checkbox" name="c4" required />
+                <span>I understand outbound shipments are released only after payment</span>
+              </label>
+
+              <label class="check">
+                <input type="checkbox" name="c5" required />
+                <span>I understand PrepNest NY is not responsible for manufacturer defects</span>
+              </label>
+            </fieldset>
+
+            <fieldset class="fieldset">
+              <legend>Section 7 — Notes</legend>
+              <label>
+                Additional details or special instructions
+                <textarea name="notes" rows="5" placeholder="Add details here…"></textarea>
+              </label>
+            </fieldset>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn btn-primary btn-lg" type="submit">Submit Request</button>
+            <p class="muted small" id="formStatus" role="status" aria-live="polite"></p>
+          </div>
+
+          <div class="callout subtle">
+            Section 8 — Submission Disclaimer: Submission of this form does not guarantee acceptance. All requests are reviewed prior to confirmation.
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <nav class="footer-links" aria-label="Legal">
+        <button class="linklike" data-modal="privacy">Privacy Policy</button>
+        <span class="sep">|</span>
+        <button class="linklike" data-modal="terms">Terms of Service</button>
+        <span class="sep">|</span>
+        <button class="linklike" data-modal="storage">Storage Policy</button>
+        <span class="sep">|</span>
+        <button class="linklike" data-modal="liability">Liability Disclaimer</button>
+      </nav>
+      <div class="footer-meta">2026 | PrepNest NY LLC</div>
+    </div>
+  </footer>
+
+  <div class="modal" id="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Policy dialog">
+    <div class="modal-backdrop" id="modalBackdrop"></div>
+    <div class="modal-card" role="document">
+      <div class="modal-head">
+        <h3 id="modalTitle">Title</h3>
+        <button class="icon-btn" id="modalClose" aria-label="Close dialog">✕</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
     </div>
   </div>
-</header>
 
-<main class="site-main">
-<section class="section">
-  <div class="container">
-    <h2>Get Started — Intake Form</h2>
-    <p class="lead">
-      Submission of this form does not guarantee acceptance. All requests are reviewed prior to confirmation.
-    </p>
-
-    <form class="form" id="intakeForm" novalidate>
-
-      <fieldset class="fieldset">
-        <legend>Client Information</legend>
-
-        <label>Full Name *
-          <input type="text" name="fullName" required>
-        </label>
-
-        <label>Email *
-          <input type="email" name="email" required>
-        </label>
-      </fieldset>
-
-      <fieldset class="fieldset">
-        <legend>Shipment Details</legend>
-
-        <label>Estimated number of boxes *
-          <input type="number" name="boxes" min="1" required>
-        </label>
-
-        <label>Estimated total units *
-          <input type="number" name="units" min="1" required>
-        </label>
-      </fieldset>
-
-      <div class="form-actions">
-        <button class="btn btn-primary" type="submit">Submit Request</button>
-        <p class="muted small" id="formStatus"></p>
-      </div>
-
-      <div class="callout">
-        Submission of this form does not guarantee acceptance.
-      </div>
-
-    </form>
-  </div>
-</section>
-</main>
-
-<footer class="site-footer">
-  <div class="container footer-inner">
-    <nav class="footer-links">
-      <button class="linklike" type="button" data-modal="privacy">Privacy Policy</button>
-      <span class="sep">|</span>
-      <button class="linklike" type="button" data-modal="terms">Terms of Service</button>
-      <span class="sep">|</span>
-      <button class="linklike" type="button" data-modal="storage">Storage Policy</button>
-    </nav>
-    <div class="footer-meta">2026 | PrepNest NY LLC</div>
-  </div>
-</footer>
-
-<div class="modal" id="modal">
-  <div class="modal-backdrop" id="modalBackdrop"></div>
-  <div class="modal-card">
-    <div class="modal-head">
-      <h3 id="modalTitle"></h3>
-      <button class="icon-btn" id="modalClose">✕</button>
-    </div>
-    <div class="modal-body" id="modalBody"></div>
-  </div>
-</div>
-
-<script src="js/main.js"></script>
+  <script src="js/main.js"></script>
 </body>
 </html>
