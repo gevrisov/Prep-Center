@@ -153,6 +153,10 @@ body{
   color: var(--blue);
   border-color: var(--blue-200);
 }
+.btn-primary:hover,
+.btn-primary:focus-visible{
+  background: var(--blue-100);      /* ← заливка ТОЛЬКО при hover */
+}
 .btn-primary:hover{filter: brightness(.98);}
 
 .hero-cta{
