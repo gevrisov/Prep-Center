@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Get Started — Intake Form | PrepNest NY LLC</title>
+  <title>Intake Form | PrepNest NY LLC</title>
   <meta name="description" content="Submit an intake request for Amazon FBA prep services." />
 
   <link rel="icon" type="image/png" href="assets/favicon.png" />
@@ -11,6 +11,18 @@
 </head>
 
 <body>
+  <!-- TOP BAR -->
+  <div class="top-bar" role="region" aria-label="Top bar">
+    <div class="top-bar-inner">
+      <div class="top-bar-left">
+        <span class="top-bar-placeholder"> </span>
+      </div>
+      <div class="top-bar-right">
+        <span class="top-bar-placeholder"> </span>
+      </div>
+    </div>
+  </div>
+
   <!-- HEADER -->
   <header class="site-header" id="top">
     <div class="header-inner">
@@ -25,9 +37,8 @@
         <a class="nav-link" href="index.html#pricing">Pricing</a>
       </nav>
 
-      <a class="btn btn-google" href="intake.html" aria-current="page">
-        GET STARTED <span class="btn-ico" aria-hidden="true">↗</span>
-      </a>
+      <!-- Contact Us instead of Get Started -->
+      <a class="btn btn-google" href="#contact">CONTACT US</a>
     </div>
   </header>
 
@@ -198,9 +209,7 @@
           </div>
 
           <div class="form-actions">
-            <button class="btn btn-google btn-google-lg" type="submit">
-              SUBMIT REQUEST <span class="btn-ico" aria-hidden="true">↗</span>
-            </button>
+            <button class="btn btn-google btn-google-lg" type="submit">SUBMIT REQUEST</button>
             <p class="muted small" id="formStatus" role="status" aria-live="polite"></p>
           </div>
 
@@ -208,6 +217,36 @@
             Submission of this form does not guarantee acceptance. All requests are reviewed prior to confirmation.
           </div>
         </form>
+      </div>
+    </section>
+
+    <!-- CONTACT US TEMPLATE -->
+    <section class="section" id="contact">
+      <div class="container">
+        <h2>Contact Us</h2>
+        <p class="lead">Template — you can replace the placeholders with your final contact details.</p>
+
+        <div class="grid-2">
+          <div class="panel">
+            <h3>Primary Contact</h3>
+            <ul>
+              <li><strong>Email:</strong> your-email@domain.com</li>
+              <li><strong>Phone:</strong> +1 (___) ___-____</li>
+            </ul>
+          </div>
+
+          <div class="panel">
+            <h3>Location / Hours</h3>
+            <ul>
+              <li><strong>Address:</strong> (add your address)</li>
+              <li><strong>Hours:</strong> (add your hours)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="callout subtle">
+          Optional: add links here later (WhatsApp, Instagram, etc.).
+        </div>
       </div>
     </section>
   </main>
@@ -224,7 +263,8 @@
         <span class="sep">|</span>
         <button class="linklike" data-modal="liability">Liability Disclaimer</button>
       </nav>
-      <div class="footer-meta">2026 | PrepNest NY LLC</div>
+
+      <div class="footer-meta">2026 | All rights reserved</div>
     </div>
   </footer>
 
