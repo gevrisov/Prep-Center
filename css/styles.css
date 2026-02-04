@@ -27,14 +27,10 @@ body{
 }
 
 .container{max-width:var(--max); margin:0 auto; padding:0 20px;}
-.site-main{
-  padding-top: var(--header-h);
-}
+.site-main{padding-top: var(--header-h);}
 
 /* Scroll snap */
-.site-main{
-  scroll-snap-type: y proximity;
-}
+.site-main{scroll-snap-type: y proximity;}
 .section{
   scroll-snap-align: start;
   padding: 64px 0;
@@ -99,7 +95,7 @@ body{
   width: 28px;
   height: 28px;
   object-fit: contain;
-  border-radius: 0; /* IMPORTANT: no rounding */
+  border-radius: 0;
 }
 .brand-text{
   font-weight: 700;
@@ -149,7 +145,7 @@ body{
 }
 .btn-lg{padding: 12px 16px; font-size: 15px;}
 .btn-primary{
-  background: var(--blue-100); /* light blue per request */
+  background: var(--blue-100);
   color: var(--blue);
   border-color: var(--blue-200);
 }
@@ -157,7 +153,7 @@ body{
 
 .hero-cta{display:flex; gap: 10px; flex-wrap: wrap;}
 
-/* Layout blocks */
+/* Cards */
 .cards{
   display:grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -176,32 +172,27 @@ body{
 .card ul{margin: 12px 0 0 18px; color: var(--text)}
 .note{margin-top: 12px; color: var(--muted); font-size: 13px;}
 
+/* Steps (FIXED for two-column mobile without number overlap) */
 .steps{
   display:grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
+  gap: 18px;
 
-  /* FIX: remove default ol numbering spacing */
   list-style: none;
   padding-left: 0;
   margin: 18px 0 0;
 
-  /* FIX: custom numbering */
   counter-reset: step;
 }
-
 .steps li{
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 14px 16px;
 
-  /* FIX: space for number inside the card */
   position: relative;
-  padding-left: 46px;
+  padding-left: 52px; /* room for number inside card */
 }
-
-/* FIX: draw the number inside each card */
 .steps li::before{
   counter-increment: step;
   content: counter(step) ".";
@@ -211,7 +202,10 @@ body{
   font-weight: 700;
   color: var(--muted);
 }
+.steps h3{margin: 0 0 6px; font-size: 16px;}
+.steps p{margin: 0; color: var(--muted); line-height: 1.55;}
 
+/* Pricing panels */
 .grid-2{
   display:grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -228,6 +222,7 @@ body{
 .panel ul{margin: 12px 0 0 18px;}
 .panel li{margin: 6px 0}
 
+/* Callouts */
 .callout{
   margin-top: 18px;
   border: 1px solid var(--blue-200);
@@ -352,58 +347,14 @@ input:focus,select:focus,textarea:focus{
 .modal-body h4{margin-top: 18px;}
 .modal-body p, .modal-body li{color: var(--muted);}
 
-/* Requested: hide intake until Get Started */
-.hidden{ display:none; }
-
-/* Requested: Floating pills only on mobile + bottom bar */
-.floating-nav{
-  display:none; /* desktop hidden */
-}
-
+/* Mobile */
 @media (max-width: 900px){
   .nav-desktop{display:none;}
   .cards{grid-template-columns: 1fr;}
-  .steps{grid-template-columns: 1fr;}
   .grid-2{grid-template-columns: 1fr;}
   .form-grid{grid-template-columns: 1fr;}
 
-  .floating-nav{
-    display:flex;
-    position: fixed;
-    left: 12px;
-    right: 12px;
-    bottom: 12px;
-    z-index: 40;
-
-    gap: 8px;
-    padding: 10px;
-    background: rgba(255,255,255,.92);
-    backdrop-filter: blur(10px);
-    border: 1px solid var(--line);
-    border-radius: 999px;
-    box-shadow: var(--shadow);
-  }
-
-  .pill{
-    flex: 1;
-    text-align:center;
-    text-decoration:none;
-    font-size: 13px;
-    color: var(--muted);
-    background: transparent;
-    border: 1px solid transparent;
-    border-radius: 999px;
-    padding: 10px 8px;
-    white-space: nowrap;
-  }
-
-  .pill.active{
-    background: var(--blue-100);
-    color: var(--blue);
-    border-color: var(--blue-200);
-  }
-
-  /* Requested: footer smaller so links fit one row; meta on second line */
+  /* Footer: one row links, meta on second line */
   .footer-inner{
     flex-direction: column;
     gap: 8px;
@@ -419,7 +370,4 @@ input:focus,select:focus,textarea:focus{
   .footer-meta{
     font-size: 12px;
   }
-
-  /* make room for bottom pills */
-  .site-footer{ padding-bottom: 86px; }
 }
