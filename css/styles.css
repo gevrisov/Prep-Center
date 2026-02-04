@@ -103,7 +103,7 @@ body{
   font-size: 18px;
   color: grey;
   letter-spacing: .08em;
-  text-transform: uppercase;
+  text-transform: capitalize;
 }
 
 .nav-desktop{
