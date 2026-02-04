@@ -167,6 +167,24 @@ body{
   flex-wrap: wrap;
   justify-content: center; /* ← ВАЖНО */
 }
+/* убираем раздражающий прямоугольник при клике */
+.btn,
+.btn:focus,
+.btn:active {
+  outline: none;
+  box-shadow: none;
+}
+
+/* убираем tap-highlight на мобильных */
+.btn {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* аккуратный focus ТОЛЬКО для клавиатуры */
+.btn:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 4px;
+}
 
 /* Cards */
 .cards{
