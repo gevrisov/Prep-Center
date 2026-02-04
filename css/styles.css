@@ -49,13 +49,6 @@ body{
     var(--bg);
 }
 
-.kicker{
-  color: var(--muted);
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  font-size: 12px;
-  margin: 0 0 10px;
-}
 .headline{
   font-size: clamp(28px, 3vw, 44px);
   line-height: 1.12;
@@ -106,11 +99,14 @@ body{
   width: 28px;
   height: 28px;
   object-fit: contain;
-  /* IMPORTANT: no rounding */
-  border-radius: 0;
+  border-radius: 0; /* IMPORTANT: no rounding */
 }
-.brand-text{font-weight: 600; font-size: 14px;}
-.brand-sub{color:var(--muted); font-weight:500}
+.brand-text{
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
 
 .nav-desktop{
   display:flex;
@@ -153,57 +149,15 @@ body{
 }
 .btn-lg{padding: 12px 16px; font-size: 15px;}
 .btn-primary{
-  background: var(--blue-100); /* light blue per your request */
+  background: var(--blue-100); /* light blue per request */
   color: var(--blue);
   border-color: var(--blue-200);
 }
 .btn-primary:hover{filter: brightness(.98);}
-.btn-ghost{
-  background: transparent;
-  color: var(--text);
-  border-color: var(--line);
-}
-.btn-ghost:hover{background: rgba(0,0,0,.03);}
 
-.icon-btn{
-  width: 40px; height: 40px;
-  border-radius: 999px;
-  border: 1px solid var(--line);
-  background: var(--bg);
-  cursor:pointer;
-}
-.icon-btn:hover{background: rgba(0,0,0,.03);}
-
-/* Floating pills nav */
-.floating-nav{
-  position: fixed;
-  top: calc(var(--header-h) + 12px);
-  right: 16px;
-  display:flex;
-  flex-direction: column;
-  gap: 8px;
-  z-index: 40;
-}
-.pill{
-  text-decoration:none;
-  font-size: 13px;
-  color: var(--muted);
-  background: rgba(255,255,255,.88);
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  padding: 10px 12px;
-  box-shadow: var(--shadow);
-}
-.pill:hover{color: var(--text);}
-.pill.active{
-  background: var(--blue-100);
-  color: var(--blue);
-  border-color: var(--blue-200);
-}
-
-/* Layout blocks */
 .hero-cta{display:flex; gap: 10px; flex-wrap: wrap;}
 
+/* Layout blocks */
 .cards{
   display:grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -226,18 +180,37 @@ body{
   display:grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
-  padding-left: 18px;
+
+  /* FIX: remove default ol numbering spacing */
+  list-style: none;
+  padding-left: 0;
   margin: 18px 0 0;
+
+  /* FIX: custom numbering */
+  counter-reset: step;
 }
+
 .steps li{
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 14px 16px;
-  list-style: decimal;
+
+  /* FIX: space for number inside the card */
+  position: relative;
+  padding-left: 46px;
 }
-.steps h3{margin: 0 0 6px; font-size: 16px;}
-.steps p{margin: 0; color: var(--muted); line-height: 1.55;}
+
+/* FIX: draw the number inside each card */
+.steps li::before{
+  counter-increment: step;
+  content: counter(step) ".";
+  position: absolute;
+  left: 16px;
+  top: 14px;
+  font-weight: 700;
+  color: var(--muted);
+}
 
 .grid-2{
   display:grid;
@@ -379,50 +352,74 @@ input:focus,select:focus,textarea:focus{
 .modal-body h4{margin-top: 18px;}
 .modal-body p, .modal-body li{color: var(--muted);}
 
-/* Mobile */
-.mobile-drawer{
-  display:none;
+/* Requested: hide intake until Get Started */
+.hidden{ display:none; }
+
+/* Requested: Floating pills only on mobile + bottom bar */
+.floating-nav{
+  display:none; /* desktop hidden */
 }
+
 @media (max-width: 900px){
   .nav-desktop{display:none;}
-  .floating-nav{right: 10px; top: calc(var(--header-h) + 10px);}
   .cards{grid-template-columns: 1fr;}
   .steps{grid-template-columns: 1fr;}
   .grid-2{grid-template-columns: 1fr;}
   .form-grid{grid-template-columns: 1fr;}
-  .mobile-drawer{
-    display:block;
+
+  .floating-nav{
+    display:flex;
     position: fixed;
-    top: var(--header-h);
+    left: 12px;
     right: 12px;
-    width: min(340px, calc(100vw - 24px));
-    background: var(--bg);
+    bottom: 12px;
+    z-index: 40;
+
+    gap: 8px;
+    padding: 10px;
+    background: rgba(255,255,255,.92);
+    backdrop-filter: blur(10px);
     border: 1px solid var(--line);
-    border-radius: var(--radius);
+    border-radius: 999px;
     box-shadow: var(--shadow);
-    padding: 12px;
-    transform: translateY(-12px);
-    opacity: 0;
-    pointer-events: none;
-    transition: .18s ease;
-    z-index: 55;
   }
-  .mobile-drawer.open{
-    transform: translateY(0);
-    opacity: 1;
-    pointer-events: auto;
+
+  .pill{
+    flex: 1;
+    text-align:center;
+    text-decoration:none;
+    font-size: 13px;
+    color: var(--muted);
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    padding: 10px 8px;
+    white-space: nowrap;
   }
-  .mobile-drawer-head{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--line);
+
+  .pill.active{
+    background: var(--blue-100);
+    color: var(--blue);
+    border-color: var(--blue-200);
   }
-  .mobile-title{font-weight: 700;}
-  .mobile-drawer-links{
-    display:flex;
+
+  /* Requested: footer smaller so links fit one row; meta on second line */
+  .footer-inner{
     flex-direction: column;
-    padding-top: 8px;
+    gap: 8px;
   }
+  .footer-links{
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    overflow-x: auto;
+    gap: 10px;
+    font-size: 12px;
+  }
+  .sep{ display:none; }
+  .footer-meta{
+    font-size: 12px;
+  }
+
+  /* make room for bottom pills */
+  .site-footer{ padding-bottom: 86px; }
 }
