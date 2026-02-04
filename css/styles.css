@@ -84,91 +84,44 @@ body{
   margin: 0 auto;
 }
 
-/* Glue-like lock-up */
-.glue-header__lock-up{
+.brand{
   display:flex;
-  align-items:center;
-  min-width: 200px;
-}
-.glue-header__logo{
-  display:flex;
-  align-items:center;
-}
-.glue-header__logo-link{
-  display:inline-flex;
   align-items:center;
   gap: 10px;
   text-decoration:none;
   color: var(--text);
-  border-radius: 999px;
-  padding: 6px 8px;
+  min-width: 200px;
 }
-.glue-header__logo-link:hover{
-  background: rgba(0,0,0,.04);
-}
-.glue-header__logo-container{
-  width: 28px;
-  height: 28px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex: 0 0 auto;
-}
-.glue-header__logo-img{
+.brand-logo{
   width: 28px;
   height: 28px;
   object-fit: contain;
   border-radius: 0; /* no rounding */
-  display:block;
 }
-.glue-header__logo--product{
+.brand-text{
   font-weight: 700;
   font-size: 12px;
   letter-spacing: .08em;
   text-transform: uppercase;
-  color: var(--text);
-  white-space: nowrap;
 }
 
-/* Glue-like header nav */
-.glue-header__link-bar{
+.nav-desktop{
   display:flex;
-  align-items:center;
-}
-.glue-header__list{
-  display:flex;
-  align-items:center;
-  gap: 4px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.glue-header__item{
-  position: relative;
-}
-.glue-header__link{
-  display:inline-flex;
-  align-items:center;
   gap: 6px;
+  align-items:center;
+}
+.nav-link{
+  text-decoration:none;
+  color: var(--muted);
+  font-size: 14px;
   padding: 10px 12px;
   border-radius: 999px;
-  color: var(--muted);
-  text-decoration: none;
-  font-size: 14px;
-  line-height: 1;
-  border: 1px solid transparent;
-  background: transparent;
-  cursor: pointer;
-  font: inherit;
 }
-.glue-header__link:hover{
-  background: rgba(0,0,0,.04);
-  color: var(--text);
-}
-.glue-header__item--active > .glue-header__link{
+.nav-link:hover{background: rgba(0,0,0,.04); color: var(--text);}
+.nav-link.active{
   background: var(--blue-100);
   color: var(--blue);
-  border-color: var(--blue-200);
+  box-shadow: inset 0 0 0 1px var(--blue-200);
 }
 
 .header-actions{
@@ -177,42 +130,27 @@ body{
   align-items:center;
 }
 
-/* Glue-like button */
-.glue-button{
+/* Buttons */
+.btn{
   display:inline-flex;
   align-items:center;
+  justify-content:center;
   gap: 8px;
-
-  padding: 10px 14px;
+  border: 1px solid transparent;
   border-radius: 999px;
-  border: 1px solid var(--blue-200);
-
-  font-size: 14px;
-  font-weight: 500;
-  text-decoration: none;
-  white-space: nowrap;
-
-  cursor: pointer;
-  user-select: none;
-  transition: background .15s ease, box-shadow .15s ease;
+  padding: 10px 14px;
+  font-weight: 600;
+  text-decoration:none;
+  cursor:pointer;
+  user-select:none;
 }
-.glue-button--medium-emphasis{
+.btn-lg{padding: 12px 16px; font-size: 15px;}
+.btn-primary{
   background: var(--blue-100);
   color: var(--blue);
+  border-color: var(--blue-200);
 }
-.glue-button--medium-emphasis:hover{
-  background: #dfe9fd;
-}
-.glue-button-text{line-height: 1;}
-.glue-button--icon-right .glue-icon{
-  width: 18px;
-  height: 18px;
-  fill: currentColor;
-}
-.glue-button:focus-visible{
-  outline: none;
-  box-shadow: 0 0 0 4px rgba(26,115,232,.25);
-}
+.btn-primary:hover{filter: brightness(.98);}
 
 .hero-cta{display:flex; gap: 10px; flex-wrap: wrap;}
 
@@ -235,16 +173,14 @@ body{
 .card ul{margin: 12px 0 0 18px; color: var(--text)}
 .note{margin-top: 12px; color: var(--muted); font-size: 13px;}
 
-/* Steps (FIX: two-column, no number overlap) */
+/* Steps FIX: 2 columns, numbers inside cards (no overlap) */
 .steps{
   display:grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px;
-
   list-style: none;
   padding-left: 0;
   margin: 18px 0 0;
-
   counter-reset: step;
 }
 .steps li{
@@ -252,7 +188,6 @@ body{
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 14px 16px;
-
   position: relative;
   padding-left: 52px;
 }
@@ -412,14 +347,12 @@ input:focus,select:focus,textarea:focus{
 
 /* Mobile */
 @media (max-width: 900px){
-  /* You removed burger; keep header nav hidden on mobile */
-  .glue-header__link-bar{display:none;}
-
+  .nav-desktop{display:none;} /* burger not used */
   .cards{grid-template-columns: 1fr;}
   .grid-2{grid-template-columns: 1fr;}
   .form-grid{grid-template-columns: 1fr;}
 
-  /* Footer: links in one row (scroll if needed), meta on second line */
+  /* Footer: links in one row, meta on second line */
   .footer-inner{
     flex-direction: column;
     gap: 8px;
