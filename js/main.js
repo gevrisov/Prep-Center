@@ -1,27 +1,17 @@
-// --- Mobile menu ---
-const menuBtn = document.getElementById("menuBtn");
-const closeMenuBtn = document.getElementById("closeMenuBtn");
-const mobileDrawer = document.getElementById("mobileDrawer");
+// --- Open intake on "Get Started" ---
+const intakeSection = document.getElementById("intake");
 
-function openMenu(){
-  mobileDrawer.classList.add("open");
-  mobileDrawer.setAttribute("aria-hidden", "false");
-  menuBtn.setAttribute("aria-expanded", "true");
-}
-function closeMenu(){
-  mobileDrawer.classList.remove("open");
-  mobileDrawer.setAttribute("aria-hidden", "true");
-  menuBtn.setAttribute("aria-expanded", "false");
+function openIntake(){
+  if (!intakeSection) return;
+  intakeSection.classList.remove("hidden");
+  intakeSection.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-menuBtn?.addEventListener("click", () => {
-  if (mobileDrawer.classList.contains("open")) closeMenu();
-  else openMenu();
-});
-closeMenuBtn?.addEventListener("click", closeMenu);
-
-mobileDrawer?.addEventListener("click", (e) => {
-  if (e.target && e.target.matches("a.nav-link")) closeMenu();
+document.querySelectorAll('[data-action="open-intake"]').forEach((btn) => {
+  btn.addEventListener("click", (e) => {
+    e.preventDefault();
+    openIntake();
+  });
 });
 
 // --- Active section highlighting (header links + pills) ---
@@ -36,7 +26,6 @@ function setActive(sectionId){
 }
 
 const io = new IntersectionObserver((entries) => {
-  // pick the most visible section
   const visible = entries
     .filter(e => e.isIntersecting)
     .sort((a,b) => b.intersectionRatio - a.intersectionRatio)[0];
@@ -59,7 +48,6 @@ function updateStorageVisibility(){
   const on = !!svcStorage?.checked;
   storageExtra.hidden = !on;
 
-  // If storage selected -> standardBoxes becomes required
   if (on) {
     standardBoxes.setAttribute("required", "required");
   } else {
@@ -74,20 +62,15 @@ updateStorageVisibility();
 intakeForm?.addEventListener("submit", (e) => {
   e.preventDefault();
 
-  // HTML5 validation
   if (!intakeForm.checkValidity()){
     formStatus.textContent = "Please complete all required fields and confirmations.";
-    // show built-in validation UI
     intakeForm.reportValidity();
     return;
   }
 
-  // Minimal payload preview (for now)
   const data = new FormData(intakeForm);
   const payload = Object.fromEntries(data.entries());
 
-  // NOTE: Files cannot be emailed/stored without backend.
-  // Here we just simulate submit.
   console.log("Intake payload:", payload);
 
   formStatus.textContent = "Request submitted (demo). To receive submissions by email, connect a backend (e.g., Formspree/Netlify/Cloudflare) later.";
