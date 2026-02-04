@@ -12,11 +12,11 @@
 <header class="site-header">
   <div class="header-inner">
     <a class="brand" href="index.html">
-      <img class="brand-logo" src="assets/favicon.png" alt="PrepNest NY LLC" />
-      <span class="brand-text">Prep Center</span>
+      <img class="brand-logo" src="assets/logo.png" alt="PrepNest NY LLC" />
+      <span class="brand-text">PREP CENTER</span>
     </a>
 
-    <nav class="nav-desktop">
+    <nav class="nav-desktop" aria-label="Primary">
       <a class="nav-link" href="index.html">Home</a>
       <a class="nav-link" href="services.html">Services</a>
       <a class="nav-link" href="storage.html">Storage</a>
@@ -33,7 +33,7 @@
   </div>
 
   <div class="mobile-menu hidden" id="mobileMenu" aria-hidden="true">
-    <nav class="mobile-nav">
+    <nav class="mobile-nav" aria-label="Mobile navigation">
       <a class="mobile-link" href="index.html">Home</a>
       <a class="mobile-link" href="services.html">Services</a>
       <a class="mobile-link" href="storage.html">Storage</a>
@@ -46,27 +46,30 @@
 
 <main class="site-main">
   <section class="section">
-    <div class="container">
-      <h1 class="headline">Storage</h1>
-      <p class="lead">Short-term storage to support prep and shipment scheduling.</p>
+    <div class="container prose">
+      <h1 class="headline">Temporary Storage</h1>
+      <p class="lead">
+        We offer short-term storage to support inventory processing and outbound shipment scheduling.
+      </p>
+
+      <h3>Storage Terms</h3>
+      <ul>
+        <li>Short-term storage only</li>
+        <li>Storage is billed per box</li>
+        <li>Weekly or monthly billing options</li>
+        <li>Standard box size and weight limits apply</li>
+      </ul>
 
       <div class="callout">
-        Storage is billed per box. Standard size and weight limits apply.
+        <strong>Storage is intended for temporary holding during prep and is not designed for long-term warehousing.</strong>
       </div>
-
-      <ul class="list">
-        <li>Short-term only (not long-term warehousing)</li>
-        <li>Billed per box</li>
-        <li>Weekly or monthly billing</li>
-        <li>Boxes must be sealed and stackable</li>
-      </ul>
     </div>
   </section>
 </main>
 
 <footer class="site-footer">
   <div class="container footer-inner">
-    <nav class="footer-links">
+    <nav class="footer-links" aria-label="Legal">
       <a class="footer-link" href="privacy.html">Privacy Policy</a>
       <span class="sep">|</span>
       <a class="footer-link" href="terms.html">Terms of Service</a>
@@ -80,4 +83,3 @@
 <script src="js/main.js"></script>
 </body>
 </html>
-
