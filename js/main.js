@@ -1,4 +1,4 @@
-// --- Intake form behavior (only works when form exists) ---
+// --- Intake form behavior (only runs when form exists) ---
 const svcStorage = document.getElementById("svcStorage");
 const storageExtra = document.getElementById("storageExtra");
 const standardBoxes = document.getElementById("standardBoxes");
@@ -56,6 +56,7 @@ const policies = {
     body: `
       <p><strong>Effective date:</strong> February 4, 2026</p>
       <p>This Privacy Policy explains how PrepNest NY LLC (“PrepNest NY”, “we”, “us”) collects, uses, and protects information submitted through our website and intake forms.</p>
+
       <h4>Information We Collect</h4>
       <ul>
         <li>Contact details (name, email, phone)</li>
@@ -63,8 +64,9 @@ const policies = {
         <li>Shipment estimates (boxes, units)</li>
         <li>Selected services (prep, receiving, storage)</li>
       </ul>
+
       <h4>Contact</h4>
-      <p>Email: support@joynhappiness.com<br/>Company: PrepNest NY LLC, Brooklyn, NY</p>
+      <p>Email: (add your email)<br/>Company: PrepNest NY LLC, Brooklyn, NY</p>
     `
   },
   terms: {
@@ -72,8 +74,10 @@ const policies = {
     body: `
       <p>PrepNest NY LLC is an independent service provider and is not affiliated with Amazon.</p>
       <p>By submitting an intake request or using our services, you agree to these Terms.</p>
+
       <h4>Payment</h4>
       <p>Outbound shipments are released only after payment is received.</p>
+
       <h4>Right to Decline</h4>
       <p>We reserve the right to decline any shipment that does not meet operational requirements.</p>
     `
