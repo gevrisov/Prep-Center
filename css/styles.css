@@ -207,12 +207,12 @@ body{
   counter-increment: step;
   content: counter(step) ".";
   position: absolute;
-  left: 16px;
+  left: 10px;
   top: 14px;
   font-weight: 700;
   color: var(--muted);
 }
-.steps h3{margin: 0 0 3px; font-size: 16px;}
+.steps h3{margin: 0 0 6px; font-size: 16px;}
 .steps p{margin: 0; color: var(--muted); line-height: 1.55;}
 
 /* Pricing panels */
