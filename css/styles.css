@@ -99,8 +99,8 @@ body{
   border-radius: 0; /* no rounding */
 }
 .brand-text{
-  font-weight: 900;
-  font-size: 18px;
+  font-weight: 600;
+  font-size: 24px;
   letter-spacing: .08em;
   text-transform: uppercase;
 }
