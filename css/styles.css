@@ -100,7 +100,7 @@ body{
 }
 .brand-text{
   font-weight: 600;
-  font-size: 24px;
+  font-size: 20px;
   letter-spacing: .08em;
   text-transform: uppercase;
 }
@@ -145,8 +145,8 @@ body{
   user-select:none;
 }
 .btn-lg{
-  padding: 16px 24px;   /* больше по всем сторонам */
-  font-size: 36px;      /* визуально солиднее */
+  padding: 16px 36px;   /* больше по всем сторонам */
+  font-size: 24px;      /* визуально солиднее */
 }
 .btn-primary{
   background: transparent;
