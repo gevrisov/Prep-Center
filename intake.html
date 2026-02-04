@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Get Started — Intake Form | PrepNest NY LLC</title>
+  <title>Intake Form | PrepNest NY LLC</title>
+  <meta name="description" content="Client onboarding intake form for PrepNest NY LLC." />
   <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
@@ -11,12 +12,12 @@
 
 <header class="site-header">
   <div class="header-inner">
-    <a class="brand" href="index.html">
-      <img class="brand-logo" src="assets/favicon.png" alt="PrepNest NY LLC" />
-      <span class="brand-text">Prep Center</span>
+    <a class="brand" href="index.html" aria-label="PrepNest NY home">
+      <img class="brand-logo" src="assets/logo.png" alt="PrepNest NY LLC" />
+      <span class="brand-text">PREP CENTER</span>
     </a>
 
-    <nav class="nav-desktop">
+    <nav class="nav-desktop" aria-label="Primary">
       <a class="nav-link" href="index.html">Home</a>
       <a class="nav-link" href="services.html">Services</a>
       <a class="nav-link" href="storage.html">Storage</a>
@@ -26,14 +27,15 @@
 
     <div class="header-actions">
       <a class="btn btn-primary btn-lg" href="intake.html">Get Started</a>
-      <button class="burger" id="burgerBtn" type="button" aria-label="Open menu" aria-controls="mobileMenu" aria-expanded="false">
+      <button class="burger" id="burgerBtn" type="button"
+        aria-label="Open menu" aria-controls="mobileMenu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
     </div>
   </div>
 
   <div class="mobile-menu hidden" id="mobileMenu" aria-hidden="true">
-    <nav class="mobile-nav">
+    <nav class="mobile-nav" aria-label="Mobile navigation">
       <a class="mobile-link" href="index.html">Home</a>
       <a class="mobile-link" href="services.html">Services</a>
       <a class="mobile-link" href="storage.html">Storage</a>
@@ -47,28 +49,202 @@
 <main class="site-main">
   <section class="section">
     <div class="container">
-      <h1 class="headline">Get Started — Intake Form</h1>
-      <p class="lead">Submission of this form does not guarantee acceptance. All requests are reviewed prior to confirmation.</p>
+      <h1 class="headline">Intake Form</h1>
+      <p class="lead">
+        Submission of this form does not guarantee acceptance. All requests are reviewed prior to confirmation.
+      </p>
 
-      <form class="callout" id="intakeForm">
-        <label>Full Name*<br><input required name="fullName" style="width:100%;padding:10px;border:1px solid var(--line);border-radius:12px;"></label><br><br>
-        <label>Email*<br><input required type="email" name="email" style="width:100%;padding:10px;border:1px solid var(--line);border-radius:12px;"></label><br><br>
-        <label>Boxes*<br><input required type="number" min="1" name="boxes" style="width:100%;padding:10px;border:1px solid var(--line);border-radius:12px;"></label><br><br>
-        <label>Units*<br><input required type="number" min="1" name="units" style="width:100%;padding:10px;border:1px solid var(--line);border-radius:12px;"></label><br><br>
+      <form class="form" id="intakeForm" novalidate>
+        <div class="form-grid">
 
-        <div class="hero-cta">
-          <button class="btn btn-primary btn-lg" type="submit">Submit Request</button>
+          <fieldset class="fieldset">
+            <legend>Section 1 — Client Information</legend>
+
+            <label>
+              Full Name <span class="req">*</span>
+              <input name="fullName" type="text" required autocomplete="name" />
+            </label>
+
+            <label>
+              Company Name (optional)
+              <input name="companyName" type="text" autocomplete="organization" />
+            </label>
+
+            <label>
+              Email <span class="req">*</span>
+              <input name="email" type="email" required autocomplete="email" />
+            </label>
+
+            <label>
+              Phone (optional)
+              <input name="phone" type="tel" autocomplete="tel" />
+            </label>
+          </fieldset>
+
+          <fieldset class="fieldset">
+            <legend>Section 2 — Amazon Business Info</legend>
+
+            <label>
+              Amazon Marketplace <span class="req">*</span>
+              <select name="marketplace" required>
+                <option value="" selected disabled>Choose…</option>
+                <option>US</option>
+                <option>CA</option>
+                <option>EU</option>
+                <option>Other</option>
+              </select>
+            </label>
+
+            <label>
+              Seller Type <span class="req">*</span>
+              <select name="sellerType" required>
+                <option value="" selected disabled>Choose…</option>
+                <option>Private Label</option>
+                <option>Wholesale</option>
+                <option>Arbitrage</option>
+              </select>
+            </label>
+          </fieldset>
+
+          <fieldset class="fieldset">
+            <legend>Section 3 — Shipment Details</legend>
+
+            <label>
+              Estimated number of boxes <span class="req">*</span>
+              <input name="boxes" type="number" min="1" required />
+            </label>
+
+            <label>
+              Estimated total units <span class="req">*</span>
+              <input name="units" type="number" min="1" required />
+            </label>
+
+            <p class="small muted">
+              Units are used for prep estimates (not storage billing).
+            </p>
+          </fieldset>
+
+          <fieldset class="fieldset">
+            <legend>Section 4 — Services Required</legend>
+
+            <div class="checkrow">
+              <input id="svcPrep" name="svcPrep" type="checkbox" />
+              <label for="svcPrep">Prep services (labeling, polybagging, etc.)</label>
+            </div>
+
+            <div class="checkrow">
+              <input id="svcReceive" name="svcReceive" type="checkbox" />
+              <label for="svcReceive">Receiving &amp; inspection</label>
+            </div>
+
+            <div class="checkrow">
+              <input id="svcStorage" name="svcStorage" type="checkbox" />
+              <label for="svcStorage">Temporary storage (per box)</label>
+            </div>
+
+            <div class="callout hidden" id="storageNotice">
+              <strong>Storage is short-term and billed per box.</strong><br>
+              <span class="small">Standard box size and weight limits apply.</span>
+              <div style="margin-top:10px;">
+                <label>
+                  Are all boxes standard size (up to 24" x 18" x 18" and 50 lbs)? <span class="req">*</span>
+                  <select id="standardBoxes" name="standardBoxes">
+                    <option value="" selected disabled>Choose…</option>
+                    <option>Yes</option>
+                    <option>No</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+
+            <label style="margin-top:10px;">
+              Estimated arrival date (optional)
+              <input name="arrivalDate" type="date" />
+            </label>
+          </fieldset>
+
+          <fieldset class="fieldset">
+            <legend>Section 5 — File Uploads</legend>
+
+            <label>
+              Upload FNSKU labels (PDF)
+              <input name="fns sku" type="file" accept="application/pdf" />
+            </label>
+
+            <label>
+              Upload packing list (optional)
+              <input name="packingList" type="file" />
+            </label>
+
+            <p class="small muted">
+              File uploads may not be processed on GitHub Pages without a backend. This is for future integration.
+            </p>
+          </fieldset>
+
+          <fieldset class="fieldset">
+            <legend>Section 6 — Important Confirmations (required)</legend>
+
+            <div class="checkrow">
+              <input name="c1" type="checkbox" required />
+              <label>I confirm that all inventory is non-hazardous</label>
+            </div>
+
+            <div class="checkrow">
+              <input name="c2" type="checkbox" required />
+              <label>I confirm all boxes meet the standard size and weight requirements</label>
+            </div>
+
+            <div class="checkrow">
+              <input name="c3" type="checkbox" required />
+              <label>I understand storage is short-term and billed per box</label>
+            </div>
+
+            <div class="checkrow">
+              <input name="c4" type="checkbox" required />
+              <label>I understand outbound shipments are released only after payment</label>
+            </div>
+
+            <div class="checkrow">
+              <input name="c5" type="checkbox" required />
+              <label>I understand PrepNest NY is not responsible for manufacturer defects</label>
+            </div>
+
+            <p class="small muted">
+              These confirmations are required to submit the request.
+            </p>
+          </fieldset>
+
+          <fieldset class="fieldset">
+            <legend>Section 7 — Notes</legend>
+            <label>
+              Additional details or special instructions
+              <textarea name="notes" placeholder="Add notes here..."></textarea>
+            </label>
+          </fieldset>
+
+          <fieldset class="fieldset">
+            <legend>Section 8 — Submission Disclaimer</legend>
+            <div class="callout warn">
+              <strong>Submission of this form does not guarantee acceptance.</strong><br>
+              <span class="small">All requests are reviewed prior to confirmation.</span>
+            </div>
+          </fieldset>
+
         </div>
 
-        <p class="lead" id="formStatus"></p>
+        <div class="form-actions">
+          <button class="btn btn-primary btn-lg" type="submit">Submit Request</button>
+          <p class="small" id="formStatus"></p>
+        </div>
       </form>
+
     </div>
   </section>
 </main>
 
 <footer class="site-footer">
   <div class="container footer-inner">
-    <nav class="footer-links">
+    <nav class="footer-links" aria-label="Legal">
       <a class="footer-link" href="privacy.html">Privacy Policy</a>
       <span class="sep">|</span>
       <a class="footer-link" href="terms.html">Terms of Service</a>
@@ -82,4 +258,3 @@
 <script src="js/main.js"></script>
 </body>
 </html>
-
