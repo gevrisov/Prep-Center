@@ -184,9 +184,7 @@ body{
 .card p{color: var(--muted); line-height: 1.6}
 .card ul{margin: 12px 0 0 18px; color: var(--text)}
 .note{margin-top: 12px; color: var(--muted); font-size: 13px;}
-.section-title{
-  text-align: center;
-}
+
 /* Steps FIX: 2 columns, numbers inside cards (no overlap) */
 .steps{
   display:grid;
@@ -203,7 +201,7 @@ body{
   border-radius: var(--radius);
   padding: 14px 16px;
   position: relative;
-  padding-left: 30px;
+  padding-left: 38px;
 }
 .steps li::before{
   counter-increment: step;
