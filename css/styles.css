@@ -10,6 +10,8 @@
   --blue-200:#d2e3fc;
   --radius: 16px;
   --max: 1040px;
+
+  --topbar-h: 32px;
   --header-h: 72px;
 }
 
@@ -17,7 +19,7 @@
 html,body{height:100%}
 html{
   scroll-behavior:smooth;
-  scroll-padding-top: calc(var(--header-h) + 16px);
+  scroll-padding-top: calc(var(--topbar-h) + var(--header-h) + 16px);
 }
 body{
   margin:0;
@@ -27,46 +29,46 @@ body{
 }
 
 .container{max-width:var(--max); margin:0 auto; padding:0 20px;}
-.site-main{padding-top: var(--header-h);}
+.site-main{
+  padding-top: calc(var(--topbar-h) + var(--header-h));
+}
 
-/* sections */
-.section{
-  padding: 64px 0;
+/* TOP BAR */
+.top-bar{
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--topbar-h);
+  background: rgba(255,255,255,.92);
   border-bottom: 1px solid var(--line);
-  background: var(--bg);
+  z-index: 60;
 }
-.hero{
-  padding: 72px 0 64px;
-  background:
-    radial-gradient(1200px 600px at 20% -20%, var(--blue-100), transparent 60%),
-    radial-gradient(900px 500px at 95% 0%, rgba(26,115,232,.10), transparent 55%),
-    var(--bg);
+.top-bar-inner{
+  height: 100%;
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 12px;
 }
-
-.headline{
-  font-size: clamp(28px, 3vw, 44px);
-  line-height: 1.12;
-  margin: 0 0 14px;
+.top-bar-left, .top-bar-right{
+  min-width: 120px;
+  display:flex;
+  align-items:center;
 }
-.subheadline{
-  color: var(--muted);
-  font-size: 16px;
-  line-height: 1.6;
-  max-width: 72ch;
-  margin: 0 0 22px;
-}
-.lead{
-  color: var(--muted);
-  line-height: 1.7;
-  max-width: 80ch;
+.top-bar-right{justify-content:flex-end;}
+.top-bar-placeholder{
+  display:inline-block;
+  width: 100%;
+  height: 14px;
 }
 
-.hero-cta{display:flex; gap: 10px; flex-wrap: wrap;}
-
-/* header */
+/* HEADER */
 .site-header{
   position: fixed;
-  top:0; left:0; right:0;
+  top: var(--topbar-h);
+  left:0; right:0;
   height: var(--header-h);
   background: rgba(255,255,255,.92);
   backdrop-filter: blur(10px);
@@ -96,14 +98,16 @@ body{
   object-fit: contain;
   border-radius: 0;
 }
+/* F) Google style, slightly larger */
 .brand-text{
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 500;
   letter-spacing: 0;
   text-transform: none;
   color: #3c4043;
 }
 
+/* E) nav not black */
 .nav-desktop{
   display:flex;
   align-items:center;
@@ -111,21 +115,58 @@ body{
 }
 .nav-link{
   text-decoration:none;
-  color:#3c4043;
+  color: var(--muted);
   font-size:14px;
   padding:10px 12px;
   border-radius:999px;
 }
 .nav-link:hover{
   background: rgba(60,64,67,.08);
+  color: #3c4043;
 }
 
-/* google-like button */
+/* Sections */
+.section{
+  padding: 64px 0;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg);
+}
+.hero{
+  padding: 72px 0 64px;
+  background:
+    radial-gradient(1200px 600px at 20% -20%, var(--blue-100), transparent 60%),
+    radial-gradient(900px 500px at 95% 0%, rgba(26,115,232,.10), transparent 55%),
+    var(--bg);
+}
+
+.headline{
+  font-size: clamp(28px, 3vw, 44px);
+  line-height: 1.12;
+  margin: 0 0 14px;
+}
+.subheadline{
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.6;
+  max-width: 72ch;
+  margin: 0 auto 22px; /* center-ish */
+}
+.lead{
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 80ch;
+}
+
+/* E) headers not pure black */
+h2, h3{
+  color: #3c4043;
+}
+
+/* Buttons (Google-outline w/ border + active color change) */
 .btn{
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  gap: 10px;
   cursor:pointer;
   user-select:none;
 }
@@ -141,11 +182,6 @@ body{
   letter-spacing: .02em;
   text-transform: uppercase;
   background: transparent;
-}
-.btn-google .btn-ico{
-  font-size: 18px;
-  line-height: 1;
-  transform: translateY(1px);
 }
 .btn-google:hover{
   background: rgba(26,115,232,.06);
@@ -163,7 +199,18 @@ body{
   padding: 14px 22px;
 }
 
-/* cards */
+/* C) main hero button bigger + centered */
+.hero-cta{
+  display:flex;
+  justify-content:center;
+  margin-top: 10px;
+}
+.btn-google-hero{
+  padding: 18px 36px;
+  font-size: 16px;
+}
+
+/* Cards */
 .cards{
   display:grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -182,7 +229,7 @@ body{
 .card ul{margin: 12px 0 0 18px; color: var(--text)}
 .note{margin-top: 12px; color: var(--muted); font-size: 13px;}
 
-/* steps (2 columns desktop, numbers inside cards) */
+/* Steps: number inside box, inline with heading */
 .steps{
   display:grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -192,27 +239,41 @@ body{
   margin: 18px 0 0;
   counter-reset: step;
 }
+
 .steps li{
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 14px 16px;
-  position: relative;
-  padding-left: 56px;
 }
-.steps li::before{
+
+/* header row: number + h3 on one line */
+.step-head{
+  display:flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.step-num::before{
   counter-increment: step;
   content: counter(step) ".";
-  position: absolute;
-  left: 16px;
-  top: 14px;
   font-weight: 700;
   color: var(--muted);
 }
-.steps h3{margin: 0 0 6px; font-size: 16px;}
-.steps p{margin: 0; color: var(--muted); line-height: 1.55;}
 
-/* pricing panels */
+.steps h3{
+  margin: 0;
+  font-size: 16px;
+}
+
+.steps p{
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+/* Pricing panels + contact template panels */
 .grid-2{
   display:grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -229,7 +290,7 @@ body{
 .panel ul{margin: 12px 0 0 18px;}
 .panel li{margin: 6px 0}
 
-/* callouts */
+/* Callouts */
 .callout{
   margin-top: 18px;
   border: 1px solid var(--blue-200);
@@ -249,7 +310,7 @@ body{
 .muted{color: var(--muted);}
 .small{font-size: 12px;}
 
-/* form */
+/* Form */
 .form{margin-top: 18px;}
 .form-grid{
   display:grid;
@@ -296,19 +357,30 @@ input:focus,select:focus,textarea:focus{
   margin-top: 14px;
 }
 
-/* footer */
+/* FOOTER: centered links on 1st row; meta fixed on 2nd row */
 .site-footer{
   border-top: 1px solid var(--line);
-  padding: 24px 0;
+  padding: 18px 0;
   background: var(--bg);
 }
 .footer-inner{
   display:flex;
-  justify-content:space-between;
-  gap: 14px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
 }
-.footer-links{display:flex; align-items:center; gap: 8px; flex-wrap: wrap;}
+.footer-links{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap: 8px;
+  flex-wrap: nowrap;       /* must stay one line */
+  white-space: nowrap;     /* must stay one line */
+  overflow-x: auto;        /* if truly needed */
+  width: 100%;
+  padding: 0 20px;         /* equal left/right so centered */
+  font-size: 12px;
+}
 .linklike{
   background: none;
   border: none;
@@ -317,12 +389,16 @@ input:focus,select:focus,textarea:focus{
   padding: 0;
   font: inherit;
 }
-.linklike:hover{color: var(--text); text-decoration: underline;}
+.linklike:hover{color: #3c4043; text-decoration: underline;}
 .sep{color: var(--line)}
-.footer-meta{color: var(--muted);}
+.footer-meta{
+  color: var(--muted);
+  font-size: 12px;
+  white-space: nowrap;     /* fixed on its own line */
+}
 
-/* modal */
-.modal{position: fixed; inset:0; display:none; z-index: 60;}
+/* Modal */
+.modal{position: fixed; inset:0; display:none; z-index: 70;}
 .modal.open{display:block;}
 .modal-backdrop{
   position:absolute; inset:0;
@@ -355,27 +431,26 @@ input:focus,select:focus,textarea:focus{
 .modal-body h4{margin-top: 18px;}
 .modal-body p, .modal-body li{color: var(--muted);}
 
-/* mobile */
+.icon-btn{
+  background:none;
+  border:none;
+  cursor:pointer;
+  font-size: 18px;
+  color: var(--muted);
+}
+.icon-btn:hover{color:#3c4043;}
+
+/* Mobile */
 @media (max-width: 900px){
   .nav-desktop{display:none;}
   .cards{grid-template-columns: 1fr;}
   .grid-2{grid-template-columns: 1fr;}
   .form-grid{grid-template-columns: 1fr;}
 
-  /* footer: links in one row, meta below */
-  .footer-inner{
-    flex-direction: column;
-    gap: 8px;
-  }
-  .footer-links{
-    flex-wrap: nowrap;
-    white-space: nowrap;
-    overflow-x: auto;
-    gap: 10px;
-    font-size: 12px;
-  }
+  /* G) максимально маленький читаемый */
+  .footer-links{ font-size: 11px; }
+  .footer-meta{ font-size: 11px; }
+
+  /* optional: hide separators to save space */
   .sep{ display:none; }
-  .footer-meta{
-    font-size: 12px;
-  }
 }
