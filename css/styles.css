@@ -99,8 +99,9 @@ body{
   border-radius: 0; /* no rounding */
 }
 .brand-text{
-  font-weight: 600;
-  font-size: 20px;
+  font-weight: 700;
+  font-size: 18px;
+  color: grey;
   letter-spacing: .08em;
   text-transform: uppercase;
 }
@@ -143,9 +144,10 @@ body{
   text-decoration:none;
   cursor:pointer;
   user-select:none;
+  background: var(--blue)
 }
 .btn-lg{
-  padding: 16px 36px;   /* больше по всем сторонам */
+  padding: 16px 70px;   /* больше по всем сторонам */
   font-size: 24px;      /* визуально солиднее */
 }
 .btn-primary{
