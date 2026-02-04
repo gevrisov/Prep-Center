@@ -199,7 +199,7 @@ body{
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  padding: 4px 16px;
+  padding: 14px 16px;
   position: relative;
   padding-left: 52px;
 }
@@ -207,7 +207,8 @@ body{
   counter-increment: step;
   content: counter(step) ".";
   position: absolute;
-  left: 4px;
+  left: 16px;
+  right: 4px;
   top: 14px;
   font-weight: 700;
   color: var(--muted);
