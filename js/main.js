@@ -149,6 +149,11 @@ const policies = {
 
       <h4>Right to Decline</h4>
       <p>PrepNest NY reserves the right to decline any shipment or request that does not meet our operational or safety requirements.</p>
+
+      <h4>Liability Disclaimer</h4>
+      <p>PrepNest NY LLC exercises reasonable care in handling inventory but does not insure goods against loss, theft, or damage unless otherwise agreed in writing.</p>
+      <p>Clients are responsible for maintaining appropriate inventory insurance.</p>
+      <p>PrepNest NY LLC is not liable for delays caused by carriers, Amazon, weather, or other events beyond our control.</p>
     `
   },
 
@@ -181,14 +186,6 @@ const policies = {
     `
   },
 
-  liability: {
-    title: "Liability Disclaimer",
-    body: `
-      <p>PrepNest NY LLC exercises reasonable care in handling inventory but does not insure goods against loss, theft, or damage unless otherwise agreed in writing.</p>
-      <p>Clients are responsible for maintaining appropriate inventory insurance.</p>
-      <p>PrepNest NY LLC is not liable for delays caused by carriers, Amazon, weather, or other events beyond our control.</p>
-    `
-  }
 };
 
 function openModal(key){
