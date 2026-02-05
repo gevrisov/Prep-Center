@@ -218,7 +218,7 @@ h1,h2{ text-align:center; }
   font-size: 17;
   justify-content: center;
   text-transform: uppercase;
-  color: var(--muted);
+  color: rgb(245, 180, 58));
 }
 
 
@@ -351,7 +351,7 @@ overflow:hidden;
   position:absolute;
   inset:0;
 
-  background-image:url("assets/wallpaper.png");
+  background-image:url("/assets/wallpaper.png");
   background-repeat:no-repeat;
   background-position:center bottom;
   background-size:cover;
@@ -562,7 +562,7 @@ overflow:hidden;
   position: absolute;
   inset: 0;
 
-  background: url("assets/wallpaper.png") center bottom / cover no-repeat;
+  background: url("/assets/wallpaper.png") center bottom / cover no-repeat;
   opacity: 0.14;
 
   /* верх слабее, низ сильнее */
