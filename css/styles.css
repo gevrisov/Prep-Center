@@ -120,11 +120,12 @@ h1,h2{ text-align:center; }
   cursor:pointer;
   user-select:none;
 }
-.btn-lg{padding:16px 24px; font-size:17px;}
+.btn-lg{padding:16px 90px; font-size:16px;}
 .btn-primary{
   background: transparent;
   color: var(--blue);
   border-color: var(--blue-200);
+  text-transform: uppercase;
 }
 .btn-primary:hover,
 .btn-primary:focus-visible{ background: var(--blue-100); }
@@ -172,12 +173,13 @@ h1,h2{ text-align:center; }
 .steps li h3{
   margin:0 0 6px;
   font-size:16px;
-  text-align:left;
+  text-align: center;
 }
 .steps li h3::before{
   content: counter(step) ".";
   font-weight:700;
   margin-right:6px;
+/*наверное здесь*/
 }
 .steps p{margin:0; color:var(--muted); line-height:1.55;}
 
