@@ -25,7 +25,20 @@ body{
 .container{max-width:var(--max); margin:0 auto; padding:0 20px;}
 .site-main{padding-top: var(--header-h);}
 
-.section{padding:64px 0; border-bottom:1px solid var(--line);}
+
+                 /* место внизу даёт */
+
+
+      
+      
+                 .section{padding:64px ; border-bottom:1px solid var(--line);}
+
+
+
+
+
+
+
 .hero{
   padding:72px 0 64px;
   background:
@@ -205,20 +218,19 @@ h1,h2{ text-align:center; }
 
 /* Callouts */
 .callout{
-  margin-top:18px;
+  margin-top:50px;
   padding:14px 16px;
   border-radius: var(--radius);
   background: var(--blue-100);
   border:1px solid var(--blue-200);
 }
 .callout.warn{
-  border:none;
+  
   text-align: center;
-  background: none;
-  font-size: 17;
-  justify-content: center;
+  color: #5f6368;
+  font-size: 14;
   text-transform: uppercase;
-  color: rgb(245, 180, 58));
+  background: none;
 }
 
 
