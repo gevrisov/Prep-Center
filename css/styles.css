@@ -199,9 +199,7 @@ h1,h2{ text-align:center; }
   padding:14px 16px; 
   counter-increment: step;
 }
-.steps li:hover, .steps li:focus-visible {
-  color: #1a73e8;
-}
+
 
 .steps li h3{
   margin:0 0 6px;
@@ -363,7 +361,7 @@ overflow:hidden;
   position:absolute;
   inset:0;
 
-  background-image:url("/assets/wallpaper.png");
+  background-image:url("wallpaper.png");
   background-repeat:no-repeat;
   background-position:center bottom;
   background-size:cover;
@@ -574,7 +572,7 @@ overflow:hidden;
   position: absolute;
   inset: 0;
 
-  background: url("/assets/wallpaper.png") center bottom / cover no-repeat;
+  background: url("wallpaper.png") center bottom / cover no-repeat;
   opacity: 0.14;
 
   /* верх слабее, низ сильнее */
