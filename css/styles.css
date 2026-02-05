@@ -281,6 +281,7 @@ h1,h2{ text-align:center; }
 .fieldset legend{
   font-weight:700;
   padding: 0 6px;
+  text-align: center;
 }
 .form-grid{
   display:grid;
