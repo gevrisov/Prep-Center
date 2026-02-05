@@ -19,9 +19,14 @@ a, button, input, label, textarea, select {
 
 
 *{box-sizing:border-box}
-html,body{height:100%}
+html,body{
+  height:100%
+}
 html{scroll-behavior:smooth; scroll-padding-top: calc(var(--header-h) + 16px);}
 body{
+  min-height:100vh;
+  display: flex;
+  flex-direction: column;
   margin:0;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
   background:var(--bg);
@@ -29,7 +34,9 @@ body{
 }
 
 .container{max-width:var(--max); margin:0 auto; padding:0 20px;}
-.site-main{padding-top: var(--header-h);}
+.site-main{padding-top: var(--header-h);
+flex: 1;
+}
 
 .section{padding:64px 0; border-bottom:1px solid var(--line);}
 .hero{
