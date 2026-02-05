@@ -572,23 +572,16 @@ overflow:hidden;
   position: absolute;
   inset: 0;
 
-  background: url("wallpaper.png") center bottom / cover no-repeat;
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(10,12,16,0.9) 0%,
+      rgba(10,12,16,0.4) 30%,
+      rgba(10,12,16,0.0) 65%
+    ),
+    url("wallpaper.png") center bottom / cover no-repeat;
+
   opacity: 0.14;
-
-  /* верх слабее, низ сильнее */
-  mask-image: linear-gradient(
-    to bottom,
-    rgba(0,0,0,0.35) 0%,
-    rgba(0,0,0,1) 30%,
-    rgba(0,0,0,1) 80%
-  );
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    rgba(0,0,0,0.35) 0%,
-    rgba(0,0,0,1) 35%,
-    rgba(0,0,0,1) 100%
-  );
-
   pointer-events: none;
   z-index: 0;
 }
