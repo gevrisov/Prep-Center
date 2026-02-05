@@ -12,6 +12,12 @@
   --header-h: 72px;
 }
 
+
+a, button, input, label, textarea, select {
+-webkit-tap-highlight-color: transparent;
+}
+
+
 *{box-sizing:border-box}
 html,body{height:100%}
 html{scroll-behavior:smooth; scroll-padding-top: calc(var(--header-h) + 16px);}
@@ -366,7 +372,6 @@ textarea{min-height: 110px; resize: vertical;}
   align-items:center;
   justify-content:center;
   transition: transform .2s ease;
-  -webkit-tap-highlight-color: transparent;
 }
 
 /* Burger lines */
