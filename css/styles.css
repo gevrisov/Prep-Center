@@ -12,21 +12,10 @@
   --header-h: 72px;
 }
 
-
-a, button, input, label, textarea, select {
--webkit-tap-highlight-color: transparent;
-}
-
-
 *{box-sizing:border-box}
-html,body{
-  height:100%
-}
+html,body{height:100%}
 html{scroll-behavior:smooth; scroll-padding-top: calc(var(--header-h) + 16px);}
 body{
-  min-height:100vh;
-  display: flex;
-  flex-direction: column;
   margin:0;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
   background:var(--bg);
@@ -34,9 +23,7 @@ body{
 }
 
 .container{max-width:var(--max); margin:0 auto; padding:0 20px;}
-.site-main{padding-top: var(--header-h);
-flex: 1;
-}
+.site-main{padding-top: var(--header-h);}
 
 .section{padding:64px 0; border-bottom:1px solid var(--line);}
 .hero{
@@ -192,16 +179,20 @@ h1,h2{ text-align:center; }
   margin:24px 0 0;
   counter-reset: step;
 }
-.steps li{
-  background: var(--card);
-  border:1px solid var(--line);
-  border-radius: var(--radius);
-  padding:14px 16px;
+.steps li{ 
+  background: transparent; 
+  border:1px solid var(--line); 
+  border-radius: var(--radius); 
+  padding:14px 16px; 
   counter-increment: step;
 }
+.steps li:hover, .steps li:focus-visible {
+  color: #1a73e8;
+}
+
 .steps li h3{
   margin:0 0 6px;
-  font-size:16px;
+  font-size:18px;
   text-align: center;
 }
 .steps li h3::before{
@@ -210,7 +201,7 @@ h1,h2{ text-align:center; }
   margin-right:6px;
 /*наверное здесь*/
 }
-.steps p{margin:0; color:var(--muted); line-height:1.55;}
+.steps p{margin:0; color:var(--muted); line-height:1.55;text-align: center;}
 
 /* Callouts */
 .callout{
@@ -221,9 +212,19 @@ h1,h2{ text-align:center; }
   border:1px solid var(--blue-200);
 }
 .callout.warn{
-  background:#fff7d6;
-  border-color:#fde293;
+  border:none;
+  text-align: center;
+  background: none;
+  font-size: 17;
+  justify-content: center;
+  text-transform: uppercase;
+  color: var(--muted);
 }
+
+
+
+
+
 
 /* Content container (legal pages / FAQ) */
 .prose{
@@ -320,7 +321,7 @@ textarea{min-height: 110px; resize: vertical;}
 .checkrow{
   display:flex;
   gap:10px;
-  align-items:center;
+  align-items:flex-start;
   margin:10px 0 0;
 }
 .checkrow input{width:auto; margin-top:3px;}
@@ -336,7 +337,31 @@ textarea{min-height: 110px; resize: vertical;}
 }
 
 /* Footer centered */
-.site-footer{border-top:1px solid var(--line); padding:24px 0;}
+.site-footer{
+  border-top:1px solid var(--line); 
+  padding:24px 0;
+position: relative;
+padding:24px 0;
+overflow:hidden;
+  background: transparent;
+}
+
+
+.footer-bg{
+  position:absolute;
+  inset:0;
+
+  background-image:url("assets/wallpaper.png");
+  background-repeat:no-repeat;
+  background-position:center bottom;
+  background-size:cover;
+
+  opacity:0.12;          /* прозрачность */
+  z-index:0;
+  pointer-events:none;
+}
+
+
 .footer-inner{
   display:flex;
   flex-direction:column;
@@ -357,6 +382,8 @@ textarea{min-height: 110px; resize: vertical;}
 .footer-link:hover{color: var(--text); text-decoration:underline;}
 .sep{color: var(--line);}
 .footer-meta{color: var(--muted);}
+
+
 
 /* =========================
    MOBILE UI (burger + menu)
@@ -522,7 +549,42 @@ textarea{min-height: 110px; resize: vertical;}
   .menu-overlay{
     display:none !important;
   }
-  /* Remove mobile tap highlight */
+}
 
+/* ===== Background from hero to footer ===== */
 
+.below-hero{
+  position: relative;
+}
+
+.below-hero::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: url("assets/wallpaper.png") center bottom / cover no-repeat;
+  opacity: 0.14;
+
+  /* верх слабее, низ сильнее */
+  mask-image: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.35) 0%,
+    rgba(0,0,0,1) 30%,
+    rgba(0,0,0,1) 80%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.35) 0%,
+    rgba(0,0,0,1) 35%,
+    rgba(0,0,0,1) 100%
+  );
+
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* весь контент поверх фона */
+.below-hero > *{
+  position: relative;
+  z-index: 1;
 }
