@@ -26,6 +26,18 @@ body{
 .site-main{padding-top: var(--header-h);}
 
 
+
+/* Remove mobile tap highlight (WebKit) */
+a,
+button,
+input,
+label,
+textarea,
+select{
+  -webkit-tap-highlight-color: transparent;
+}
+
+
                  /* место внизу даёт */
 
 
