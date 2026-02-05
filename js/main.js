@@ -1,70 +1,48 @@
-// Burger menu toggle (mobile)
 const burgerBtn = document.getElementById("burgerBtn");
 const mobileMenu = document.getElementById("mobileMenu");
+const menuOverlay = document.getElementById("menuOverlay");
 
-function closeMenu(){
-  if (!burgerBtn || !mobileMenu) return;
-  burgerBtn.setAttribute("aria-expanded", "false");
-  mobileMenu.classList.add("hidden");
-  mobileMenu.setAttribute("aria-hidden", "true");
-}
+if (burgerBtn && mobileMenu && menuOverlay) {
+  function setOpen(open) {
+    burgerBtn.classList.toggle("is-open", open);
+    burgerBtn.setAttribute("aria-expanded", open ? "true" : "false");
 
-function openMenu(){
-  if (!burgerBtn || !mobileMenu) return;
-  burgerBtn.setAttribute("aria-expanded", "true");
-  mobileMenu.classList.remove("hidden");
-  mobileMenu.setAttribute("aria-hidden", "false");
-}
+    mobileMenu.classList.toggle("is-open", open);
+    mobileMenu.setAttribute("aria-hidden", open ? "false" : "true");
 
-burgerBtn?.addEventListener("click", () => {
-  const isOpen = burgerBtn.getAttribute("aria-expanded") === "true";
-  if (isOpen) closeMenu();
-  else openMenu();
-});
+    menuOverlay.classList.toggle("is-open", open);
+    menuOverlay.setAttribute("aria-hidden", open ? "false" : "true");
 
-document.querySelectorAll(".mobile-link").forEach((a) => {
-  a.addEventListener("click", () => closeMenu());
-});
-
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") closeMenu();
-});
-
-// Intake form logic
-const intakeForm = document.getElementById("intakeForm");
-const svcStorage = document.getElementById("svcStorage");
-const storageNotice = document.getElementById("storageNotice");
-const standardBoxes = document.getElementById("standardBoxes");
-const formStatus = document.getElementById("formStatus");
-
-function updateStorageUI(){
-  if (!svcStorage || !storageNotice || !standardBoxes) return;
-  const on = svcStorage.checked;
-
-  storageNotice.classList.toggle("hidden", !on);
-
-  // Standard box question is required only if storage selected
-  if (on) standardBoxes.setAttribute("required", "required");
-  else {
-    standardBoxes.removeAttribute("required");
-    standardBoxes.value = "";
-  }
-}
-
-svcStorage?.addEventListener("change", updateStorageUI);
-updateStorageUI();
-
-intakeForm?.addEventListener("submit", (e) => {
-  e.preventDefault();
-
-  if (!intakeForm.checkValidity()){
-    formStatus && (formStatus.textContent = "Please complete all required fields and confirmations.");
-    intakeForm.reportValidity();
-    return;
+    document.body.style.overflow = open ? "hidden" : "";
   }
 
-  // Demo submit
-  formStatus && (formStatus.textContent = "Request submitted (demo). To receive submissions by email, connect a backend later.");
-  intakeForm.reset();
-  updateStorageUI();
-});
+  function closeWithBounce() {
+    mobileMenu.classList.add("is-closing");
+    setTimeout(() => {
+      mobileMenu.classList.remove("is-closing");
+      setOpen(false);
+    }, 120);
+  }
+
+  function isOpen() {
+    return burgerBtn.getAttribute("aria-expanded") === "true";
+  }
+
+  burgerBtn.addEventListener("click", () => {
+    isOpen() ? closeWithBounce() : setOpen(true);
+  });
+
+  menuOverlay.addEventListener("click", closeWithBounce);
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeWithBounce();
+  });
+
+  // Close when clicking any mobile link
+  mobileMenu.querySelectorAll("a").forEach((a) => {
+    a.addEventListener("click", closeWithBounce);
+  });
+
+  // Ensure closed on load
+  setOpen(false);
+}
