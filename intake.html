@@ -5,45 +5,47 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Intake Form | PrepNest NY LLC</title>
   <meta name="description" content="Client onboarding intake form for PrepNest NY LLC." />
-  <link rel="icon" type="image/png" href="favicon.png" />
-  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="icon" type="image/png" href="logo.png" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
 <header class="site-header">
   <div class="header-inner">
-    <a class="brand" href="index.html" aria-label="PrepNest NY home">
-      <img class="brand-logo" src="assets/logo.png" alt="PrepNest NY LLC" />
-      <span class="brand-text">PREP CENTER</span>
-    </a>
+            <a class="brand" href="index.html" aria-label="PrepNest NY home">
+            <img class="brand-logo" src="logo.png" alt="PrepNest NY LLC" />
+            <span class="brand-text">Prep Center</span></a>
 
-    <nav class="nav-desktop" aria-label="Primary">
-      <a class="nav-link" href="index.html">Home</a>
-      <a class="nav-link" href="services.html">Services</a>
-      <a class="nav-link" href="storage.html">Storage</a>
-      <a class="nav-link" href="pricing.html">Pricing</a>
-      <a class="nav-link" href="faq.html">FAQ</a>
-    </nav>
+            <nav class="nav-desktop" aria-label="Primary">
+                <a class="nav-link" href="index.html">Home</a>
+                <a class="nav-link" href="services.html">Services</a>
+                <a class="nav-link" href="storage.html">Storage</a>
+                <a class="nav-link" href="pricing.html">Pricing</a>
+                <a class="nav-link" href="faq.html">FAQ</a>
+            </nav>
 
-    <div class="header-actions">
-      <a class="btn btn-primary btn-lg" href="intake.html">Get Started</a>
-      <button class="burger" id="burgerBtn" type="button"
-        aria-label="Open menu" aria-controls="mobileMenu" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
+        <div class="header-actions">
+            <a class="btn btn-header" href="intake.html">Get Started</a>
+
+            <button class="burger" id="burgerBtn" type="button"
+                aria-label="Menu" aria-expanded="false" aria-controls="mobileMenu">
+                <span class="line"></span>
+                <span class="line"></span>
+                <span class="line"></span>
+            </button>
+        </div>
     </div>
-  </div>
 
-  <div class="mobile-menu hidden" id="mobileMenu" aria-hidden="true">
-    <nav class="mobile-nav" aria-label="Mobile navigation">
-      <a class="mobile-link" href="index.html">Home</a>
-      <a class="mobile-link" href="services.html">Services</a>
-      <a class="mobile-link" href="storage.html">Storage</a>
-      <a class="mobile-link" href="pricing.html">Pricing</a>
-      <a class="mobile-link" href="faq.html">FAQ</a>
-      <a class="mobile-link mobile-cta" href="intake.html">Get Started</a>
-    </nav>
-  </div>
+    <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+        <nav class="mobile-nav" aria-label="Mobile navigation">
+            <a class="mobile-link" href="index.html">Home</a>
+            <a class="mobile-link" href="services.html">Services</a>
+            <a class="mobile-link" href="storage.html">Storage</a>
+            <a class="mobile-link" href="pricing.html">Pricing</a>
+            <a class="mobile-link" href="faq.html">FAQ</a>
+        </nav>
+    </div>
+    <div class="menu-overlay" id="menuOverlay" aria-hidden="true"></div>
 </header>
 
 <main class="site-main">
@@ -51,7 +53,8 @@
     <div class="container">
       <h1 class="headline">Intake Form</h1>
       <p class="lead">
-        Submission of this form does not guarantee acceptance. All requests are reviewed prior to confirmation.
+        Use this form to submit your shipment details and requested services.
+  All information provided is used for operational review and pricing.
       </p>
 
       <form class="form" id="intakeForm" novalidate>
@@ -66,7 +69,7 @@
             </label>
 
             <label>
-              Company Name (optional)
+              Company Name
               <input name="companyName" type="text" autocomplete="organization" />
             </label>
 
@@ -255,6 +258,6 @@
   </div>
 </footer>
 
-<script src="js/main.js"></script>
+<script src="main.js"></script>
 </body>
 </html>
