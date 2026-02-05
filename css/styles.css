@@ -509,4 +509,10 @@ textarea{min-height: 110px; resize: vertical;}
   .menu-overlay{
     display:none !important;
   }
+  /* Remove mobile tap highlight */
+a,
+button{
+  -webkit-tap-highlight-color: transparent;
+}
+
 }
