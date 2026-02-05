@@ -368,7 +368,6 @@ textarea{min-height: 110px; resize: vertical;}
   transition: transform .2s ease;
   -webkit-tap-highlight-color: transparent;
 }
-}
 
 /* Burger lines */
 .burger .line{
